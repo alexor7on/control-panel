@@ -1,39 +1,18 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(
-    page_title="Control Panel",
-    page_icon="🗂️",
-    layout="centered",
-    initial_sidebar_state="collapsed"
-)
-
-st.markdown("""
-<style>
-    .block-container { padding: 0 !important; max-width: 100% !important; }
-    header { display: none !important; }
-    footer { display: none !important; }
-    #MainMenu { display: none !important; }
-</style>
-""", unsafe_allow_html=True)
+st.set_page_config(page_title="Control Panel", page_icon="🗂️", layout="centered", initial_sidebar_state="collapsed")
+st.markdown("""<style>.block-container{padding:0!important;max-width:100%!important}header,footer,#MainMenu{display:none!important}</style>""", unsafe_allow_html=True)
 
 HTML = """<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --red:#E24B4A;--red-bg:#FCEBEB;--red-dark:#791F1F;--red-border:#F09595;
-  --yellow:#BA7517;--yellow-bg:#FAEEDA;--yellow-dark:#633806;--yellow-border:#FAC775;
-  --green:#3B6D11;--green-bg:#EAF3DE;
-  --blue-bg:#E6F1FB;--blue-dark:#0C447C;--blue-border:#85B7EB;
-  --bg:#f5f4f0;--surface:#fff;--border:#e0dfd8;--text:#1a1a1a;--text2:#6b6b6b;
-  --font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace;
-}
+:root{--red:#E24B4A;--red-bg:#FCEBEB;--red-dark:#791F1F;--red-border:#F09595;--yellow:#BA7517;--yellow-bg:#FAEEDA;--yellow-dark:#633806;--yellow-border:#FAC775;--green:#3B6D11;--green-bg:#EAF3DE;--blue-bg:#E6F1FB;--blue-dark:#0C447C;--blue-border:#85B7EB;--bg:#f5f4f0;--surface:#fff;--border:#e0dfd8;--text:#1a1a1a;--text2:#6b6b6b;--font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
 #app{max-width:720px;margin:0 auto;background:var(--surface);min-height:100vh;border-left:.5px solid var(--border);border-right:.5px solid var(--border)}
 #hdr{padding:14px 16px 10px;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:10px}
@@ -43,21 +22,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 #badge-total{font-size:11px;font-weight:700;background:var(--red);color:#fff;border-radius:20px;padding:2px 9px}
 #badge-total.hidden{display:none}
 .btn-muteall{font-family:var(--font);font-size:11px;font-weight:600;padding:5px 11px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:5px}
-.btn-muteall:hover{background:#f0efe8}
-.btn-muteall.muted{background:#f0efe8;color:#aaa;border-color:var(--border)}
+.btn-muteall:hover{background:#f0efe8}.btn-muteall.muted{background:#f0efe8;color:#aaa;border-color:var(--border)}
 #tabs{display:flex;gap:5px;padding:12px 16px 0;overflow-x:auto}
 .tab-btn{font-family:var(--font);font-size:12px;font-weight:600;padding:6px 13px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;color:var(--text2);white-space:nowrap;transition:.15s}
-.tab-btn.active{background:var(--text);color:var(--surface);border-color:transparent}
-.tab-btn:hover:not(.active){background:#f0efe8}
+.tab-btn.active{background:var(--text);color:var(--surface);border-color:transparent}.tab-btn:hover:not(.active){background:#f0efe8}
 .tab-badge{display:inline-block;font-size:10px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;margin-left:4px;vertical-align:1px}
 .tab-badge.green{background:var(--green)}
-#panels{padding:14px 16px}
-.panel{display:none}.panel.active{display:block}
-.sec-hdr{display:flex;align-items:center;gap:7px;margin:16px 0 8px}
-.sec-hdr:first-child{margin-top:0}
+#panels{padding:14px 16px}.panel{display:none}.panel.active{display:block}
+.sec-hdr{display:flex;align-items:center;gap:7px;margin:16px 0 8px}.sec-hdr:first-child{margin-top:0}
 .sec-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2)}
-.sec-count{font-size:10px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px}
-.sec-count.yellow{background:var(--yellow)}
+.sec-count{font-size:10px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px}.sec-count.yellow{background:var(--yellow)}
 .al{border-radius:10px;padding:11px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px;border:1.5px solid transparent}
 .al.red{background:var(--red-bg);border-color:var(--red-border);animation:pulse-r 1.8s infinite}
 .al.yellow{background:var(--yellow-bg);border-color:var(--yellow-border);animation:pulse-y 2.5s infinite}
@@ -65,37 +39,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 @keyframes pulse-r{0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,.45)}50%{box-shadow:0 0 0 6px rgba(226,75,74,0)}}
 @keyframes pulse-y{0%,100%{box-shadow:0 0 0 0 rgba(186,117,23,.35)}50%{box-shadow:0 0 0 6px rgba(186,117,23,0)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.al-icon{font-size:17px;flex-shrink:0;margin-top:1px}
-.al-body{flex:1;min-width:0}
-.al-title{font-size:13px;font-weight:600;line-height:1.3}
-.al-sub{font-size:11px;opacity:.7;margin-top:2px}
+.al-icon{font-size:17px;flex-shrink:0;margin-top:1px}.al-body{flex:1;min-width:0}
+.al-title{font-size:13px;font-weight:600;line-height:1.3}.al-sub{font-size:11px;opacity:.7;margin-top:2px}
 .al-actions{display:flex;align-items:center;gap:5px;margin-top:7px;flex-wrap:wrap}
 .al-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:8px}
 .chk-andamento{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;font-weight:600;color:inherit;opacity:.7;user-select:none}
-.chk-andamento:hover{opacity:1}
-.chk-andamento input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:#0C447C}
+.chk-andamento:hover{opacity:1}.chk-andamento input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:#0C447C}
 .al.expired .chk-andamento{color:#fff}
 .btn-done{font-family:var(--font);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit}
-.btn-done:hover{background:rgba(0,0,0,.07)}
-.al.expired .btn-done{color:#fff;border-color:rgba(255,255,255,.5)}
+.btn-done:hover{background:rgba(0,0,0,.07)}.al.expired .btn-done{color:#fff;border-color:rgba(255,255,255,.5)}
 .btn-mute-item{font-family:var(--font);font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit;opacity:.5}
-.btn-mute-item:hover{opacity:.9}
-.al.muted{animation:none !important;opacity:.6}
-.al.muted .btn-mute-item{opacity:1}
+.btn-mute-item:hover{opacity:.9}.al.muted{animation:none!important;opacity:.6}.al.muted .btn-mute-item{opacity:1}
 .card{background:var(--surface);border-radius:11px;border:.5px solid var(--border);padding:12px 14px;margin-bottom:7px}
 .card-row{display:flex;align-items:center;gap:8px}
-.card-title{font-size:13px;font-weight:600;flex:1}
-.card-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.card-title{font-size:13px;font-weight:600;flex:1}.card-sub{font-size:11px;color:var(--text2);margin-top:2px}
 .tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:.03em}
-.tag.alta{background:var(--red-bg);color:var(--red-dark)}
-.tag.media{background:var(--yellow-bg);color:var(--yellow-dark)}
-.tag.baixa{background:var(--green-bg);color:var(--green)}
-.tag.ok{background:var(--green-bg);color:var(--green)}
-.tag.vencido{background:var(--red-bg);color:var(--red-dark)}
-.tag.andamento{background:var(--blue-bg);color:var(--blue-dark)}
+.tag.alta{background:var(--red-bg);color:var(--red-dark)}.tag.media{background:var(--yellow-bg);color:var(--yellow-dark)}
+.tag.baixa{background:var(--green-bg);color:var(--green)}.tag.ok{background:var(--green-bg);color:var(--green)}
+.tag.vencido{background:var(--red-bg);color:var(--red-dark)}.tag.andamento{background:var(--blue-bg);color:var(--blue-dark)}
 .btn-sm{font-family:var(--font);font-size:11px;font-weight:600;padding:4px 9px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;color:var(--text)}
-.btn-sm:hover{background:#f0efe8}
-.btn-sm.del{border-color:var(--red-border);color:var(--red-dark)}
+.btn-sm:hover{background:#f0efe8}.btn-sm.del{border-color:var(--red-border);color:var(--red-dark)}
 .btn-add{display:flex;align-items:center;gap:6px;width:100%;padding:10px 13px;background:#f0efe8;border:1.5px dashed var(--border);border-radius:10px;cursor:pointer;font-family:var(--font);font-size:12px;font-weight:600;color:var(--text2);margin-top:4px}
 .btn-add:hover{background:#e8e7e0;border-style:solid}
 .empty{text-align:center;padding:24px 0;color:var(--text2);font-size:12px}
@@ -108,8 +71,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .field label{font-size:11px;font-weight:700;color:var(--text2);display:block;margin-bottom:4px;letter-spacing:.04em;text-transform:uppercase}
 .field input,.field select{width:100%;padding:8px 10px;border-radius:7px;font-family:var(--font);font-size:13px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);outline:none}
 .field input:focus,.field select:focus{border-color:var(--text)}
-.field-row{display:flex;gap:8px}
-.field-row .field{flex:1}
+.field-row{display:flex;gap:8px}.field-row .field{flex:1}
 .modal-btns{display:flex;gap:7px;justify-content:flex-end;margin-top:14px}
 .btn-prim{font-family:var(--font);font-size:13px;font-weight:600;padding:7px 16px;border-radius:7px;background:var(--text);color:var(--surface);border:none;cursor:pointer}
 .btn-canc{font-family:var(--font);font-size:13px;font-weight:500;padding:7px 13px;border-radius:7px;background:transparent;color:var(--text2);border:1.5px solid var(--border);cursor:pointer}
@@ -128,7 +90,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .done-card{background:var(--surface);border-radius:11px;border:.5px solid var(--border);padding:11px 14px;margin-bottom:7px;opacity:.8}
 .done-card-row{display:flex;align-items:flex-start;gap:10px}
 .done-icon{font-size:15px;color:var(--text2);flex-shrink:0;margin-top:2px}
-.done-title{font-size:13px;font-weight:600;color:var(--text);text-decoration:line-through;opacity:.6}
+.done-title{font-size:13px;font-weight:600;text-decoration:line-through;opacity:.6}
 .done-meta{font-size:11px;color:var(--text2);margin-top:3px}
 .done-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--green-bg);color:var(--green);margin-left:auto;flex-shrink:0}
 .btn-clear{font-family:var(--font);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;border:1.5px solid var(--red-border);background:transparent;cursor:pointer;color:var(--red-dark)}
@@ -138,16 +100,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <body>
 <div id="app">
 <div id="hdr">
-  <div>
-    <div class="logo"><i class="ti ti-layout-dashboard" style="font-size:15px;vertical-align:-1px;margin-right:6px"></i>Control Panel</div>
-    <div class="sub">Gerenciador interno de trabalho</div>
-  </div>
-  <div class="hdr-right">
-    <span id="badge-total" class="hidden">0</span>
-    <button class="btn-muteall" id="btn-muteall" onclick="toggleMuteAll()">
-      <i class="ti ti-volume" id="mute-icon"></i><span id="mute-label">Som ativo</span>
-    </button>
-  </div>
+  <div><div class="logo"><i class="ti ti-layout-dashboard" style="font-size:15px;vertical-align:-1px;margin-right:6px"></i>Control Panel</div><div class="sub">Gerenciador interno de trabalho</div></div>
+  <div class="hdr-right"><span id="badge-total" class="hidden">0</span><button class="btn-muteall" id="btn-muteall" onclick="toggleMuteAll()"><i class="ti ti-volume" id="mute-icon"></i><span id="mute-label">Som ativo</span></button></div>
 </div>
 <div id="tabs">
   <button class="tab-btn active" onclick="switchTab('home')"><i class="ti ti-home" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Início</button>
@@ -158,48 +112,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 <div id="panels">
   <div id="panel-home" class="panel active"><div id="home-content"></div></div>
-  <div id="panel-faturas" class="panel">
-    <div id="fat-info" class="info-box"><i class="ti ti-info-circle" style="font-size:14px;flex-shrink:0;margin-top:1px"></i><span id="fat-info-text"></span></div>
-    <div id="fat-list"></div>
-    <button class="btn-add" onclick="openModal('cliente')"><i class="ti ti-user-plus"></i>Cadastrar cliente para fatura</button>
-  </div>
-  <div id="panel-chamados" class="panel">
-    <div id="cha-list"></div>
-    <button class="btn-add" onclick="openModal('chamado')"><i class="ti ti-plus"></i>Novo chamado</button>
-  </div>
-  <div id="panel-tarefas" class="panel">
-    <div id="tar-list"></div>
-    <button class="btn-add" onclick="openModal('tarefa')"><i class="ti ti-plus"></i>Nova tarefa</button>
-  </div>
+  <div id="panel-faturas" class="panel"><div id="fat-info" class="info-box"><i class="ti ti-info-circle" style="font-size:14px;flex-shrink:0;margin-top:1px"></i><span id="fat-info-text"></span></div><div id="fat-list"></div><button class="btn-add" onclick="openModal('cliente')"><i class="ti ti-user-plus"></i>Cadastrar cliente para fatura</button></div>
+  <div id="panel-chamados" class="panel"><div id="cha-list"></div><button class="btn-add" onclick="openModal('chamado')"><i class="ti ti-plus"></i>Novo chamado</button></div>
+  <div id="panel-tarefas" class="panel"><div id="tar-list"></div><button class="btn-add" onclick="openModal('tarefa')"><i class="ti ti-plus"></i>Nova tarefa</button></div>
   <div id="panel-feito" class="panel"><div id="feito-content"></div></div>
 </div>
-<div id="modal-bg" onclick="closeMBg(event)">
-  <div class="modal">
-    <h3 id="modal-title"></h3>
-    <div id="modal-body"></div>
-    <div class="modal-btns">
-      <button class="btn-canc" onclick="closeModal()">Cancelar</button>
-      <button class="btn-prim" onclick="saveModal()">Salvar</button>
-    </div>
-  </div>
-</div>
-<div id="pror-bg" onclick="closeProrBg(event)">
-  <div class="pror-box">
-    <h3><i class="ti ti-clock-edit" style="font-size:14px;vertical-align:-1px;margin-right:5px"></i>Prorrogar prazo</h3>
-    <div class="pror-tabs">
-      <button class="pror-tab active" id="pror-tab-h" onclick="setProrMode('h')">Horas</button>
-      <button class="pror-tab" id="pror-tab-d" onclick="setProrMode('d')">Dias úteis</button>
-    </div>
-    <div class="pror-input-row">
-      <input type="number" id="pror-val" min="1" max="999" value="4"/>
-      <span id="pror-unit-label">horas</span>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-canc" onclick="closePror()">Cancelar</button>
-      <button class="btn-prim" onclick="confirmPror()">Confirmar</button>
-    </div>
-  </div>
-</div>
+<div id="modal-bg" onclick="closeMBg(event)"><div class="modal"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-btns"><button class="btn-canc" onclick="closeModal()">Cancelar</button><button class="btn-prim" onclick="saveModal()">Salvar</button></div></div></div>
+<div id="pror-bg" onclick="closeProrBg(event)"><div class="pror-box"><h3><i class="ti ti-clock-edit" style="font-size:14px;vertical-align:-1px;margin-right:5px"></i>Prorrogar prazo</h3><div class="pror-tabs"><button class="pror-tab active" id="pror-tab-h" onclick="setProrMode('h')">Horas</button><button class="pror-tab" id="pror-tab-d" onclick="setProrMode('d')">Dias úteis</button></div><div class="pror-input-row"><input type="number" id="pror-val" min="1" max="999" value="4"/><span id="pror-unit-label">horas</span></div><div class="modal-btns"><button class="btn-canc" onclick="closePror()">Cancelar</button><button class="btn-prim" onclick="confirmPror()">Confirmar</button></div></div></div>
 </div>
 <script>
 const ALERT_INTERVAL=600000,SND_N='cp_snd_n',SND_E='cp_snd_e';
@@ -224,6 +143,41 @@ const S={
   }
 };
 let modalType=null,prorIdx=null,prorType=null,prorMode='h';
+
+// Horas úteis restantes até o deadline (conta apenas horas em dias seg-sex)
+function businessHoursLeft(deadline){
+  if(!deadline)return null;
+  const now=new Date(),end=new Date(deadline);
+  if(end<=now)return 0;
+  const totalHours=Math.ceil((end-now)/3600000);
+  let count=0,probe=new Date(now);
+  const maxIter=Math.min(totalHours+1,720);
+  for(let i=0;i<maxIter;i++){
+    if(probe.getDay()!==0&&probe.getDay()!==6)count++;
+    probe.setTime(probe.getTime()+3600000);
+    if(probe>=end)break;
+  }
+  return count;
+}
+
+// Prioridade efetiva com escalonamento automático por horas úteis
+// baixa → média quando ≤24h úteis; baixa/média → alta quando ≤4h úteis
+function effectivePriority(t){
+  const orig=t.prioridade;
+  if(orig==='alta')return{pri:'alta',escalated:false,reason:''};
+  if(!t.deadline)return{pri:orig,escalated:false,reason:''};
+  const bh=businessHoursLeft(t.deadline);
+  if(orig==='media'){
+    if(bh<=4)return{pri:'alta',escalated:true,reason:'⬆ Escalado para alta (≤4h úteis)'};
+    return{pri:'media',escalated:false,reason:''};
+  }
+  if(orig==='baixa'){
+    if(bh<=4)return{pri:'alta',escalated:true,reason:'⬆ Escalado para alta (≤4h úteis)'};
+    if(bh<=24)return{pri:'media',escalated:true,reason:'⬆ Escalado para média (≤24h úteis)'};
+    return{pri:'baixa',escalated:false,reason:''};
+  }
+  return{pri:orig,escalated:false,reason:''};
+}
 
 function getFaturaAlertDate(t){const n=new Date(),d=new Date(n.getFullYear(),n.getMonth(),t);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d;}
 function isFaturaAlertToday(){const today=new Date();today.setHours(0,0,0,0);for(const b of[1,16]){const a=getFaturaAlertDate(b);a.setHours(0,0,0,0);if(a.getTime()===today.getTime())return true;}return false;}
@@ -250,38 +204,55 @@ function collectAlerts(){
   const items=[],td=todayKey();
   if(isFaturaAlertToday()){S.clients.forEach((c,i)=>{if(!S.fatDone[`${c}_${td}`])items.push({type:'fatura',id:`fat_${i}`,cls:'red',icon:'ti-receipt',title:`Enviar fatura para ${c}`,sub:'Dia de faturamento (ajustado para dia útil)',expired:false,actions:[{label:'✓ Feito',fn:`markFatDone('${c}','${td}')`}]});});}
   S.chamados.forEach((ch,i)=>{if(ch.done)return;const exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);if(exp||(ms!==null&&ms<7200000))items.push({type:'chamado',id:`cha_${i}`,cls:exp?'red':'yellow',icon:'ti-ticket',title:`Chamado #${ch.ticket} · Pedido ${ch.pedido}`,sub:formatMsLeft(ms),expired:exp,actions:[{label:'⏱ Prorrogar',fn:`openPror('chamado',${i})`},{label:'✓ Feito',fn:`doneChamado(${i})`}]});});
-  S.tarefas.forEach((t,i)=>{if(t.done)return;const exp=isExpired(t.deadline),ms=msLeft(t.deadline),urgente=exp||(ms!==null&&ms<7200000),proxima=!exp&&ms!==null&&ms<86400000*2,aKey=`tar_${i}`;
-    if(t.prioridade==='alta'){if(exp)items.push({type:'tarefa',id:aKey,cls:'expired',icon:'ti-flag',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Alta`,expired:true,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente||proxima)items.push({type:'tarefa',id:aKey,cls:'red',icon:'ti-flag',title:`Tarefa urgente: ${t.titulo}`,sub:`Alta prioridade · ${formatMsLeft(ms)}`,expired:false,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
-    else if(t.prioridade==='media'){if(exp)items.push({type:'tarefa',id:aKey,cls:'red',icon:'ti-flag-2',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Média`,expired:true,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente||proxima)items.push({type:'tarefa',id:aKey,cls:'yellow',icon:'ti-flag-2',title:`Tarefa: ${t.titulo}`,sub:`Média prioridade · ${formatMsLeft(ms)}`,expired:false,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
-    else if(t.prioridade==='baixa'){if(exp)items.push({type:'tarefa',id:`tar_bl_${i}`,cls:'red',icon:'ti-flag-3',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Baixa`,expired:true,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente)items.push({type:'tarefa',id:`tar_bl_${i}`,cls:'yellow',icon:'ti-flag-3',title:`Tarefa: ${t.titulo}`,sub:`Baixa prioridade · ${formatMsLeft(ms)}`,expired:false,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
+  S.tarefas.forEach((t,i)=>{
+    if(t.done)return;
+    const exp=isExpired(t.deadline),ms=msLeft(t.deadline);
+    const{pri,escalated,reason}=effectivePriority(t);
+    const aKey=`tar_${i}`;
+    const urgente=exp||(ms!==null&&ms<7200000),proxima=!exp&&ms!==null&&ms<86400000*2;
+    const escBadge=escalated?`<span style="font-size:10px;font-weight:700;background:${pri==='alta'?'#FCEBEB':'#FAEEDA'};color:${pri==='alta'?'#791F1F':'#633806'};border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">⬆ Auto</span>`:'';
+    const subText=escalated&&reason?`${reason} · ${formatMsLeft(ms)}`:formatMsLeft(ms);
+    if(pri==='alta'){
+      if(exp)items.push({type:'tarefa',id:aKey,cls:'expired',icon:'ti-flag',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')}${escalated?' · Original: '+t.prioridade:''}`,expired:true,andKey:aKey,escBadge,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});
+      else if(urgente||proxima||escalated)items.push({type:'tarefa',id:aKey,cls:'red',icon:'ti-flag',title:`Tarefa urgente: ${t.titulo}`,sub:subText,expired:false,andKey:aKey,escBadge,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});
+    }else if(pri==='media'){
+      if(urgente||proxima||escalated)items.push({type:'tarefa',id:aKey,cls:'yellow',icon:'ti-flag-2',title:`Tarefa: ${t.titulo}`,sub:subText,expired:false,andKey:aKey,escBadge,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});
+    }
   });
   return items;
+}
+
+function buildAlertHTML(item){
+  const mt=isMuted(item.type,item.id);
+  const btns=item.actions.map(a=>`<button class="btn-done" onclick="${a.fn}">${a.label}</button>`).join('');
+  const mb=`<button class="btn-mute-item" onclick="toggleMuteItem('${item.type}','${item.id.replace(/'/g,"\\'")}')"><i class="ti ${mt?'ti-volume-off':'ti-volume-3'}"></i> ${mt?'Mutado':'Mutar'}</button>`;
+  const andKey=item.andKey||null,isAnd=andKey?!!S.andamento[andKey]:false;
+  const andCb=andKey?`<label class="chk-andamento"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${andKey}')"/> Em andamento</label>`:'';
+  const escBadge=item.escBadge||'';
+  return`<div class="al ${item.cls}${mt?' muted':''}"><i class="ti ${item.icon} al-icon"></i><div class="al-body"><div class="al-title">${item.title}${escBadge}</div><div class="al-sub">${item.sub}</div><div class="al-actions">${btns}</div><div class="al-footer">${andCb}<div style="display:flex;gap:5px;margin-left:auto">${mb}</div></div></div></div>`;
 }
 
 function renderHome(){
   const items=collectAlerts(),el=document.getElementById('home-content');
   const urgent=items.filter(i=>i.cls==='red'||i.cls==='expired'),attn=items.filter(i=>i.cls==='yellow');
   let html='';
-  function renderSection(list,label,countCls){if(!list.length)return'';let h=`<div class="sec-hdr"><span class="sec-title">${label}</span><span class="sec-count ${countCls}">${list.length}</span></div>`;
-    list.forEach(item=>{const mt=isMuted(item.type,item.id);const btns=item.actions.map(a=>`<button class="btn-done" onclick="${a.fn}">${a.label}</button>`).join('');const mb=`<button class="btn-mute-item" onclick="toggleMuteItem('${item.type}','${item.id.replace(/'/g,"\\'")}')"><i class="ti ${mt?'ti-volume-off':'ti-volume-3'}"></i> ${mt?'Mutado':'Mutar'}</button>`;
-      const andKey=item.andKey||null,isAnd=andKey?!!S.andamento[andKey]:false;
-      const andCb=andKey?`<label class="chk-andamento"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${andKey}')"/> Em andamento</label>`:'';
-      h+=`<div class="al ${item.cls}${mt?' muted':''}"><i class="ti ${item.icon} al-icon"></i><div class="al-body"><div class="al-title">${item.title}</div><div class="al-sub">${item.sub}</div><div class="al-actions">${btns}</div><div class="al-footer">${andCb}<div style="display:flex;gap:5px;margin-left:auto">${mb}</div></div></div></div>`;});return h;}
+  function rs(list,label,cc){if(!list.length)return'';let h=`<div class="sec-hdr"><span class="sec-title">${label}</span><span class="sec-count ${cc}">${list.length}</span></div>`;list.forEach(item=>{h+=buildAlertHTML(item);});return h;}
   if(!items.length){html='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="color:#3B6D11;opacity:.7"></i>Tudo em dia! Nenhum alerta pendente.</div>';}
-  else{html+=renderSection(urgent,'Atenção imediata','');html+=renderSection(attn,'Acompanhamento','yellow');}
+  else{html+=rs(urgent,'Atenção imediata','');html+=rs(attn,'Acompanhamento','yellow');}
   const allCha=S.chamados.filter(c=>!c.done),allT=S.tarefas.filter(t=>!t.done);
-  if(allCha.length||allT.length){html+=`<div class="divider" style="margin:14px 0 10px"></div><div class="sec-hdr"><span class="sec-title">Todas as pendências</span></div>`;
+  if(allCha.length||allT.length){
+    html+=`<div class="divider" style="margin:14px 0 10px"></div><div class="sec-hdr"><span class="sec-title">Todas as pendências</span></div>`;
     allCha.forEach((ch,i)=>{const exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);html+=`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓</button></div></div>`;});
-    allT.forEach((t,i)=>{const exp=isExpired(t.deadline),ms=msLeft(t.deadline),aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];html+=`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}${isAnd?' <span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px;vertical-align:1px">EM ANDAMENTO</span>':''}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':t.prioridade}">${exp?'VENCIDO':t.prioridade.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓</button></div></div>`;});
+    allT.forEach((t,i)=>{const exp=isExpired(t.deadline),ms=msLeft(t.deadline);const{pri,escalated}=effectivePriority(t);const aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];const escB=escalated?`<span style="font-size:10px;font-weight:700;background:${pri==='alta'?'#FCEBEB':'#FAEEDA'};color:${pri==='alta'?'#791F1F':'#633806'};border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">⬆ Auto</span>`:'';const andB=isAnd?`<span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">EM ANDAMENTO</span>`:'';html+=`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}${escB}${andB}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':pri}">${exp?'VENCIDO':pri.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓</button></div></div>`;});
   }
   el.innerHTML=html;updateBadges(items);
 }
-function updateBadges(items){const n=items.length,el=document.getElementById('badge-total');if(n>0){el.textContent=n+(n===1?' alerta':' alertas');el.classList.remove('hidden')}else el.classList.add('hidden');function b(id,n){const x=document.getElementById(id);if(n>0){x.textContent=n;x.classList.remove('hidden')}else x.classList.add('hidden')}b('tb-faturas',items.filter(i=>i.type==='fatura').length);b('tb-chamados',items.filter(i=>i.type==='chamado').length);b('tb-tarefas',items.filter(i=>i.type==='tarefa').length);const nd=S.doneLog.length;const bd=document.getElementById('tb-feito');if(nd>0){bd.textContent=nd;bd.classList.remove('hidden')}else bd.classList.add('hidden');}
+function updateBadges(items){const n=items.length,el=document.getElementById('badge-total');if(n>0){el.textContent=n+(n===1?' alerta':' alertas');el.classList.remove('hidden')}else el.classList.add('hidden');function b(id,n){const x=document.getElementById(id);if(n>0){x.textContent=n;x.classList.remove('hidden')}else x.classList.add('hidden')}b('tb-faturas',items.filter(i=>i.type==='fatura').length);b('tb-chamados',items.filter(i=>i.type==='chamado').length);b('tb-tarefas',items.filter(i=>i.type==='tarefa').length);const nd=S.doneLog.length,bd=document.getElementById('tb-feito');if(nd>0){bd.textContent=nd;bd.classList.remove('hidden')}else bd.classList.add('hidden');}
 function updateMuteBtn(){document.getElementById('mute-icon').className=S.muteAll?'ti ti-volume-off':'ti ti-volume';document.getElementById('mute-label').textContent=S.muteAll?'Som mutado':'Som ativo';document.getElementById('btn-muteall').classList.toggle('muted',S.muteAll);}
 function renderFaturas(){document.getElementById('fat-info-text').textContent=`Próximo lembrete de fatura: ${nextFaturaLabel()}. Os alertas dos dias 01 e 16 são movidos para o próximo dia útil se caírem em fim de semana.`;const el=document.getElementById('fat-list');if(!S.clients.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i>Nenhum cliente cadastrado</div>';return;}const td=todayKey(),isAD=isFaturaAlertToday();el.innerHTML=S.clients.map((c,i)=>{const done=S.fatDone[`${c}_${td}`];return`<div class="card"><div class="card-row"><i class="ti ti-building" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title" style="${done?'text-decoration:line-through;opacity:.45':''}">${c}</div><div class="card-sub">${isAD&&!done?'Hoje é dia de faturamento':'Próximo: '+nextFaturaLabel()}</div></div><span class="tag ${isAD&&!done?'alta':'ok'}">${isAD&&!done?'HOJE':'OK'}</span><button class="btn-sm del" onclick="removeCli(${i})" style="margin-left:6px"><i class="ti ti-trash"></i></button></div></div>`;}).join('');}
 function renderChamados(){const el=document.getElementById('cha-list'),ativos=S.chamados.filter(c=>!c.done);if(!ativos.length){el.innerHTML='<div class="empty"><i class="ti ti-ticket"></i>Nenhum chamado aberto</div>';return;}el.innerHTML=ativos.map(ch=>{const i=S.chamados.indexOf(ch),exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);return`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓ Feito</button></div></div>`;}).join('');}
-function renderTarefas(){const el=document.getElementById('tar-list'),ativas=S.tarefas.filter(t=>!t.done);if(!ativas.length){el.innerHTML='<div class="empty"><i class="ti ti-check"></i>Nenhuma tarefa pendente</div>';return;}const ord=['alta','media','baixa'];el.innerHTML=[...ativas].sort((a,b)=>ord.indexOf(a.prioridade)-ord.indexOf(b.prioridade)).map(t=>{const i=S.tarefas.indexOf(t),exp=isExpired(t.deadline),ms=msLeft(t.deadline),aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];return`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':t.prioridade}">${exp?'VENCIDO':t.prioridade.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓ Feito</button></div><div style="margin-top:8px;padding-top:8px;border-top:.5px solid #e0dfd8"><label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:11px;font-weight:600;color:#6b6b6b;user-select:none"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${aKey}')" style="width:14px;height:14px;cursor:pointer;accent-color:#0C447C"/> Em andamento ${isAnd?'<span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px">✓ Ciente</span>':''}</label></div></div>`;}).join('');}
-function renderFeito(){const el=document.getElementById('feito-content');if(!S.doneLog.length){el.innerHTML='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="opacity:.3"></i>Nenhum item concluído ainda.</div>';return;}const icons={fatura:'ti-receipt',chamado:'ti-ticket',tarefa:'ti-flag'};const labels={fatura:'Fatura',chamado:'Chamado',tarefa:'Tarefa'};let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:12px;color:#6b6b6b">${S.doneLog.length} item(ns) concluído(s)</span><button class="btn-clear" onclick="clearDoneLog()"><i class="ti ti-trash" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Limpar tudo</button></div>`;S.doneLog.forEach(entry=>{const d=new Date(entry.doneAt),dateStr=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}),timeStr=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});const extraTag=entry.extra?`<span class="tag ${entry.extra}" style="margin-left:6px">${entry.extra.toUpperCase()}</span>`:'';html+=`<div class="done-card"><div class="done-card-row"><i class="ti ${icons[entry.type]||'ti-check'} done-icon"></i><div style="flex:1;min-width:0"><div class="done-title">${entry.title}</div><div class="done-meta">${labels[entry.type]||'Item'} · Concluído em ${dateStr} às ${timeStr}${entry.sub?' · '+entry.sub:''}</div></div>${extraTag}<span class="done-tag" style="margin-left:8px">✓ Feito</span></div></div>`;});el.innerHTML=html;}
+function renderTarefas(){const el=document.getElementById('tar-list'),ativas=S.tarefas.filter(t=>!t.done);if(!ativas.length){el.innerHTML='<div class="empty"><i class="ti ti-check"></i>Nenhuma tarefa pendente</div>';return;}const ord=['alta','media','baixa'];el.innerHTML=[...ativas].sort((a,b)=>ord.indexOf(effectivePriority(a).pri)-ord.indexOf(effectivePriority(b).pri)).map(t=>{const i=S.tarefas.indexOf(t),exp=isExpired(t.deadline),ms=msLeft(t.deadline);const{pri,escalated,reason}=effectivePriority(t);const aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];const escNote=escalated?`<div style="font-size:10px;color:${pri==='alta'?'#791F1F':'#633806'};margin-top:3px;font-weight:600">⬆ ${reason} · Original: ${t.prioridade}</div>`:'';return`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div>${escNote}</div><span class="tag ${exp?'vencido':pri}">${exp?'VENCIDO':pri.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓ Feito</button></div><div style="margin-top:8px;padding-top:8px;border-top:.5px solid #e0dfd8"><label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:11px;font-weight:600;color:#6b6b6b;user-select:none"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${aKey}')" style="width:14px;height:14px;cursor:pointer;accent-color:#0C447C"/> Em andamento ${isAnd?'<span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px">✓ Ciente</span>':''}</label></div></div>`;}).join('');}
+function renderFeito(){const el=document.getElementById('feito-content');if(!S.doneLog.length){el.innerHTML='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="opacity:.3"></i>Nenhum item concluído ainda.</div>';return;}const icons={fatura:'ti-receipt',chamado:'ti-ticket',tarefa:'ti-flag'},labels={fatura:'Fatura',chamado:'Chamado',tarefa:'Tarefa'};let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:12px;color:#6b6b6b">${S.doneLog.length} item(ns) concluído(s)</span><button class="btn-clear" onclick="clearDoneLog()"><i class="ti ti-trash" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Limpar tudo</button></div>`;S.doneLog.forEach(entry=>{const d=new Date(entry.doneAt),ds=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}),ts=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});const et=entry.extra?`<span class="tag ${entry.extra}" style="margin-left:6px">${entry.extra.toUpperCase()}</span>`:'';html+=`<div class="done-card"><div class="done-card-row"><i class="ti ${icons[entry.type]||'ti-check'} done-icon"></i><div style="flex:1;min-width:0"><div class="done-title">${entry.title}</div><div class="done-meta">${labels[entry.type]||'Item'} · Concluído em ${ds} às ${ts}${entry.sub?' · '+entry.sub:''}</div></div>${et}<span class="done-tag" style="margin-left:8px">✓ Feito</span></div></div>`;});el.innerHTML=html;}
 function clearDoneLog(){if(!confirm('Limpar todo o histórico de itens concluídos?'))return;S.doneLog=[];S.save();renderAll();}
 function renderAll(){renderHome();renderFaturas();renderChamados();renderTarefas();renderFeito();updateMuteBtn();}
 
@@ -296,7 +267,6 @@ function closeProrBg(e){if(e.target.id==='pror-bg')closePror();}
 function setProrMode(m){prorMode=m;document.getElementById('pror-tab-h').classList.toggle('active',m==='h');document.getElementById('pror-tab-d').classList.toggle('active',m==='d');document.getElementById('pror-unit-label').textContent=m==='h'?'horas':'dias úteis';document.getElementById('pror-val').value=m==='h'?4:2;}
 function confirmPror(){const val=parseInt(document.getElementById('pror-val').value)||1;const obj=prorType==='chamado'?S.chamados[prorIdx]:S.tarefas[prorIdx];const base=obj.deadline&&new Date(obj.deadline)>new Date()?new Date(obj.deadline):new Date();if(prorMode==='h'){base.setTime(base.getTime()+val*3600000);}else{let added=0,cur=new Date(base);while(added<val){cur.setDate(cur.getDate()+1);if(cur.getDay()!==0&&cur.getDay()!==6)added++;}base.setTime(cur.getTime());}obj.deadline=base.toISOString();S.save();closePror();renderAll();}
 function switchTab(t){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector(`.tab-btn[onclick*="'${t}'"]`).classList.add('active');document.getElementById(`panel-${t}`).classList.add('active');}
-
 function openModal(type){modalType=type;document.getElementById('modal-title').textContent={chamado:'Novo chamado',tarefa:'Nova tarefa',cliente:'Cadastrar cliente'}[type];const now=new Date(),todayStr=now.toISOString().split('T')[0],timeStr=now.toTimeString().slice(0,5);const hint=`<div style="font-size:11px;color:#6b6b6b;margin-top:-6px;margin-bottom:8px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>O alerta disparará ao atingir essa data e horário (Brasília)</div>`;const bodies={chamado:`<div class="field-row"><div class="field"><label>Número do ticket</label><input id="m-ticket" placeholder="TKT-001"/></div><div class="field"><label>Número do pedido</label><input id="m-pedido" placeholder="PED-001"/></div></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div><div class="field"><label>Horário limite</label><input id="m-hora" type="time" value="${timeStr}"/></div>${hint}`,tarefa:`<div class="field"><label>Título</label><input id="m-titulo" placeholder="Ex: Revisar relatório"/></div><div class="field"><label>Prioridade</label><select id="m-pri"><option value="alta">Alta — urgente</option><option value="media" selected>Média</option><option value="baixa">Baixa</option></select></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div><div class="field"><label>Horário limite</label><input id="m-hora" type="time" value="${timeStr}"/></div>${hint}`,cliente:`<div class="field"><label>Nome do cliente</label><input id="m-cli" placeholder="Ex: Empresa ABC"/></div>`};document.getElementById('modal-body').innerHTML=bodies[type];if(type==='tarefa'){const d=new Date();d.setDate(d.getDate()+3);document.getElementById('m-data').value=d.toISOString().split('T')[0];}document.getElementById('modal-bg').classList.add('open');}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
 function closeMBg(e){if(e.target.id==='modal-bg')closeModal();}
