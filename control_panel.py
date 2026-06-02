@@ -8,7 +8,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Remove Streamlit default padding
 st.markdown("""
 <style>
     .block-container { padding: 0 !important; max-width: 100% !important; }
@@ -30,7 +29,7 @@ HTML = """<!DOCTYPE html>
 :root{
   --red:#E24B4A;--red-bg:#FCEBEB;--red-dark:#791F1F;--red-border:#F09595;
   --yellow:#BA7517;--yellow-bg:#FAEEDA;--yellow-dark:#633806;--yellow-border:#FAC775;
-  --green:#3B6D11;--green-bg:#EAF3DE;--green-border:#C0DD97;
+  --green:#3B6D11;--green-bg:#EAF3DE;
   --blue-bg:#E6F1FB;--blue-dark:#0C447C;--blue-border:#85B7EB;
   --bg:#f5f4f0;--surface:#fff;--border:#e0dfd8;--text:#1a1a1a;--text2:#6b6b6b;
   --font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace;
@@ -72,8 +71,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .al-actions{display:flex;align-items:center;gap:5px;margin-top:7px;flex-wrap:wrap}
 .btn-done{font-family:var(--font);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit}
 .btn-done:hover{background:rgba(0,0,0,.07)}
-.al.expired .btn-done,.al.expired .btn-ext{color:#fff;border-color:rgba(255,255,255,.5)}
-.btn-ext{font-family:var(--font);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit;opacity:.8}
+.al.expired .btn-done{color:#fff;border-color:rgba(255,255,255,.5)}
 .btn-mute-item{font-family:var(--font);font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit;opacity:.5;margin-left:auto}
 .btn-mute-item:hover{opacity:.9}
 .al.muted{animation:none !important;opacity:.6}
@@ -110,8 +108,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .btn-prim{font-family:var(--font);font-size:13px;font-weight:600;padding:7px 16px;border-radius:7px;background:var(--text);color:var(--surface);border:none;cursor:pointer}
 .btn-canc{font-family:var(--font);font-size:13px;font-weight:500;padding:7px 13px;border-radius:7px;background:transparent;color:var(--text2);border:1.5px solid var(--border);cursor:pointer}
 .divider{height:.5px;background:var(--border);margin:10px 0}
-.client-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--border)}
-.client-row:last-child{border:none}
 .info-box{background:#f0efe8;border-radius:8px;padding:10px 12px;font-size:11px;color:var(--text2);margin-bottom:12px;display:flex;align-items:flex-start;gap:7px}
 #pror-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);align-items:center;justify-content:center;z-index:200;padding:20px}
 #pror-bg.open{display:flex}
@@ -197,10 +193,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 </div>
 
-</div><!-- #app -->
-
+</div>
 <script>
-const ALERT_INTERVAL=600000, SND_N='cp_snd_n', SND_E='cp_snd_e';
+const ALERT_INTERVAL=600000,SND_N='cp_snd_n',SND_E='cp_snd_e';
 const S={
   clients:JSON.parse(localStorage.getItem('cp_cli')||'[]'),
   chamados:JSON.parse(localStorage.getItem('cp_cha')||'[]'),
@@ -219,9 +214,22 @@ const S={
 };
 let modalType=null,prorIdx=null,prorType=null,prorMode='h';
 
-function getFaturaAlertDate(t){const n=new Date(),d=new Date(n.getFullYear(),n.getMonth(),t);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d;}
-function isFaturaAlertToday(){const t=new Date();t.setHours(0,0,0,0);for(const b of[1,16]){const a=getFaturaAlertDate(b);a.setHours(0,0,0,0);if(a.getTime()===t.getTime())return true;}return false;}
-function nextFaturaLabel(){const n=new Date();n.setHours(0,0,0,0);const c=[];for(const b of[1,16]){let d=getFaturaAlertDate(b);d.setHours(0,0,0,0);if(d>=n)c.push(d);const nm=new Date(n.getFullYear(),n.getMonth()+1,b);while(nm.getDay()===0||nm.getDay()===6)nm.setDate(nm.getDate()+1);nm.setHours(0,0,0,0);c.push(nm);}c.sort((a,b)=>a-b);const nx=c.find(d=>d>=n)||c[0];const diff=Math.round((nx-n)/86400000);const fmt=nx.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});if(diff===0)return`Hoje (${fmt}) — dia de faturamento!`;if(diff===1)return`Amanhã (${fmt})`;return`${fmt} — em ${diff} dia(s)`;}
+function getFaturaAlertDate(t){
+  const n=new Date(),d=new Date(n.getFullYear(),n.getMonth(),t);
+  while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);
+  return d;
+}
+function isFaturaAlertToday(){
+  const today=new Date();today.setHours(0,0,0,0);
+  for(const b of[1,16]){const a=getFaturaAlertDate(b);a.setHours(0,0,0,0);if(a.getTime()===today.getTime())return true;}
+  return false;
+}
+function nextFaturaLabel(){
+  const n=new Date();n.setHours(0,0,0,0);const c=[];
+  for(const b of[1,16]){let d=getFaturaAlertDate(b);d.setHours(0,0,0,0);if(d>=n)c.push(d);const nm=new Date(n.getFullYear(),n.getMonth()+1,b);while(nm.getDay()===0||nm.getDay()===6)nm.setDate(nm.getDate()+1);nm.setHours(0,0,0,0);c.push(nm);}
+  c.sort((a,b)=>a-b);const nx=c.find(d=>d>=n)||c[0];const diff=Math.round((nx-n)/86400000);const fmt=nx.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});
+  if(diff===0)return`Hoje (${fmt}) — dia de faturamento!`;if(diff===1)return`Amanhã (${fmt})`;return`${fmt} — em ${diff} dia(s)`;
+}
 function todayKey(){return new Date().toDateString();}
 function isExpired(dl){return dl&&Date.now()>new Date(dl).getTime();}
 function msLeft(dl){return dl?new Date(dl).getTime()-Date.now():null;}
@@ -231,31 +239,26 @@ function isMuted(t,id){return S.muteAll||!!S.mutedItems[`${t}_${id}`];}
 function toggleMuteItem(t,id){const k=`${t}_${id}`;S.mutedItems[k]=!S.mutedItems[k];S.save();renderAll();}
 function toggleMuteAll(){S.muteAll=!S.muteAll;S.save();renderAll();}
 
-// ---- SONS COM WEB AUDIO API ----
 function beep(freq,dur,vol=0.15){
-  try{
-    const ac=new(window.AudioContext||window.webkitAudioContext)();
-    const o=ac.createOscillator(),g=ac.createGain();
-    o.connect(g);g.connect(ac.destination);o.frequency.value=freq;
-    g.gain.setValueAtTime(0,ac.currentTime);
-    g.gain.linearRampToValueAtTime(vol,ac.currentTime+0.03);
-    g.gain.linearRampToValueAtTime(0,ac.currentTime+dur);
-    o.start(ac.currentTime);o.stop(ac.currentTime+dur+0.05);
-  }catch(e){}
+  try{const ac=new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=freq;g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(vol,ac.currentTime+0.03);g.gain.linearRampToValueAtTime(0,ac.currentTime+dur);o.start(ac.currentTime);o.stop(ac.currentTime+dur+0.05);}catch(e){}
 }
-// Alerta normal: 3 bipes ascendentes (pendência ativa)
 function playAlert(){[0,.2,.4].forEach(t=>setTimeout(()=>beep(880,.18),t*1000));}
-// Alerta expirado: sirene pulsante (mais urgente)
 function playExpired(){[700,900,700,900,700].forEach((f,i)=>setTimeout(()=>beep(f,.22,.22),i*180));}
-// Confirmação: acorde ascendente (feito)
 function playDone(){[523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.18,.1),i*120));}
-
 function getLastSound(k){return parseInt(localStorage.getItem(k)||'0');}
 function setLastSound(k){localStorage.setItem(k,Date.now().toString());}
 
 function collectAlerts(){
   const items=[],td=todayKey();
-  if(isFaturaAlertToday()){S.clients.forEach((c,i)=>{if(!S.fatDone[`${c}_${td}`])items.push({type:'fatura',id:`fat_${i}`,cls:'red',icon:'ti-receipt',title:`Enviar fatura para ${c}`,sub:'Dia de faturamento (ajustado para dia útil)',expired:false,actions:[{label:'✓ Feito',fn:`markFatDone('${c}','${td}')`}]});});}
+  // Faturas: SÓ entra se hoje for dia de alerta (01 ou 16, ajustado para dia útil)
+  if(isFaturaAlertToday()){
+    S.clients.forEach((c,i)=>{
+      if(!S.fatDone[`${c}_${td}`])
+        items.push({type:'fatura',id:`fat_${i}`,cls:'red',icon:'ti-receipt',
+          title:`Enviar fatura para ${c}`,sub:'Dia de faturamento (ajustado para dia útil)',
+          expired:false,actions:[{label:'✓ Feito',fn:`markFatDone('${c}','${td}')`}]});
+    });
+  }
   S.chamados.forEach((ch,i)=>{if(ch.done)return;const exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);if(exp||(ms!==null&&ms<7200000))items.push({type:'chamado',id:`cha_${i}`,cls:exp?'red':'yellow',icon:'ti-ticket',title:`Chamado #${ch.ticket} · Pedido ${ch.pedido}`,sub:formatMsLeft(ms),expired:exp,actions:[{label:'⏱ Prorrogar',fn:`openPror('chamado',${i})`},{label:'✓ Feito',fn:`doneChamado(${i})`}]});});
   S.tarefas.forEach((t,i)=>{if(t.done)return;const exp=isExpired(t.deadline),ms=msLeft(t.deadline),urgente=exp||(ms!==null&&ms<7200000),proxima=!exp&&ms!==null&&ms<86400000*2;
     if(t.prioridade==='alta'){if(exp)items.push({type:'tarefa',id:`tar_${i}`,cls:'expired',icon:'ti-flag',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Alta prioridade`,expired:true,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente||proxima)items.push({type:'tarefa',id:`tar_${i}`,cls:'red',icon:'ti-flag',title:`Tarefa urgente: ${t.titulo}`,sub:`Alta prioridade · ${formatMsLeft(ms)}`,expired:false,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
@@ -279,27 +282,16 @@ function renderHome(){
   }
   el.innerHTML=html;updateBadges(items);
 }
-
 function updateBadges(items){const n=items.length,el=document.getElementById('badge-total');if(n>0){el.textContent=n+(n===1?' alerta':' alertas');el.classList.remove('hidden')}else el.classList.add('hidden');function b(id,n){const x=document.getElementById(id);if(n>0){x.textContent=n;x.classList.remove('hidden')}else x.classList.add('hidden')}b('tb-faturas',items.filter(i=>i.type==='fatura').length);b('tb-chamados',items.filter(i=>i.type==='chamado').length);b('tb-tarefas',items.filter(i=>i.type==='tarefa').length);}
 function updateMuteBtn(){document.getElementById('mute-icon').className=S.muteAll?'ti ti-volume-off':'ti ti-volume';document.getElementById('mute-label').textContent=S.muteAll?'Som mutado':'Som ativo';document.getElementById('btn-muteall').classList.toggle('muted',S.muteAll);}
-
 function renderFaturas(){
   document.getElementById('fat-info-text').textContent=`Próximo lembrete de fatura: ${nextFaturaLabel()}. Os alertas dos dias 01 e 16 são movidos para o próximo dia útil se caírem em fim de semana.`;
   const el=document.getElementById('fat-list');if(!S.clients.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i>Nenhum cliente cadastrado</div>';return;}
   const td=todayKey(),isAD=isFaturaAlertToday();
   el.innerHTML=S.clients.map((c,i)=>{const done=S.fatDone[`${c}_${td}`];return`<div class="card"><div class="card-row"><i class="ti ti-building" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title" style="${done?'text-decoration:line-through;opacity:.45':''}">${c}</div><div class="card-sub">${isAD&&!done?'Hoje é dia de faturamento':'Próximo: '+nextFaturaLabel()}</div></div><span class="tag ${isAD&&!done?'alta':'ok'}">${isAD&&!done?'HOJE':'OK'}</span><button class="btn-sm del" onclick="removeCli(${i})" style="margin-left:6px"><i class="ti ti-trash"></i></button></div></div>`;}).join('');
 }
-function renderChamados(){
-  const el=document.getElementById('cha-list'),ativos=S.chamados.filter(c=>!c.done);
-  if(!ativos.length){el.innerHTML='<div class="empty"><i class="ti ti-ticket"></i>Nenhum chamado aberto</div>';return;}
-  el.innerHTML=ativos.map(ch=>{const i=S.chamados.indexOf(ch),exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);return`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓ Feito</button></div></div>`;}).join('');
-}
-function renderTarefas(){
-  const el=document.getElementById('tar-list'),ativas=S.tarefas.filter(t=>!t.done);
-  if(!ativas.length){el.innerHTML='<div class="empty"><i class="ti ti-check"></i>Nenhuma tarefa pendente</div>';return;}
-  const ord=['alta','media','baixa'];
-  el.innerHTML=[...ativas].sort((a,b)=>ord.indexOf(a.prioridade)-ord.indexOf(b.prioridade)).map(t=>{const i=S.tarefas.indexOf(t),exp=isExpired(t.deadline),ms=msLeft(t.deadline);return`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':t.prioridade}">${exp?'VENCIDO':t.prioridade.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓ Feito</button></div></div>`;}).join('');
-}
+function renderChamados(){const el=document.getElementById('cha-list'),ativos=S.chamados.filter(c=>!c.done);if(!ativos.length){el.innerHTML='<div class="empty"><i class="ti ti-ticket"></i>Nenhum chamado aberto</div>';return;}el.innerHTML=ativos.map(ch=>{const i=S.chamados.indexOf(ch),exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);return`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓ Feito</button></div></div>`;}).join('');}
+function renderTarefas(){const el=document.getElementById('tar-list'),ativas=S.tarefas.filter(t=>!t.done);if(!ativas.length){el.innerHTML='<div class="empty"><i class="ti ti-check"></i>Nenhuma tarefa pendente</div>';return;}const ord=['alta','media','baixa'];el.innerHTML=[...ativas].sort((a,b)=>ord.indexOf(a.prioridade)-ord.indexOf(b.prioridade)).map(t=>{const i=S.tarefas.indexOf(t),exp=isExpired(t.deadline),ms=msLeft(t.deadline);return`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':t.prioridade}">${exp?'VENCIDO':t.prioridade.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓ Feito</button></div></div>`;}).join('');}
 function renderAll(){renderHome();renderFaturas();renderChamados();renderTarefas();updateMuteBtn();}
 
 function markFatDone(c,td){playDone();S.fatDone[`${c}_${td}`]=true;S.save();renderAll();}
@@ -316,8 +308,7 @@ function confirmPror(){const val=parseInt(document.getElementById('pror-val').va
 function switchTab(t){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector(`.tab-btn[onclick*="'${t}'"]`).classList.add('active');document.getElementById(`panel-${t}`).classList.add('active');}
 
 function openModal(type){
-  modalType=type;
-  document.getElementById('modal-title').textContent={chamado:'Novo chamado',tarefa:'Nova tarefa',cliente:'Cadastrar cliente'}[type];
+  modalType=type;document.getElementById('modal-title').textContent={chamado:'Novo chamado',tarefa:'Nova tarefa',cliente:'Cadastrar cliente'}[type];
   const now=new Date(),todayStr=now.toISOString().split('T')[0],timeStr=now.toTimeString().slice(0,5);
   const hint=`<div style="font-size:11px;color:#6b6b6b;margin-top:-6px;margin-bottom:8px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>O alerta disparará ao atingir essa data e horário (Brasília)</div>`;
   const bodies={
@@ -338,25 +329,27 @@ function saveModal(){
   S.save();closeModal();renderAll();
 }
 
+// Som só toca se houver alertas reais na lista
 function checkAndAlert(){
   if(S.muteAll)return;
-  const items=collectAlerts();if(!items.length)return;
-  const nm=items.filter(i=>!isMuted(i.type,i.id));if(!nm.length)return;
+  const items=collectAlerts();
+  if(!items.length)return;  // sem alertas = sem som
+  const nm=items.filter(i=>!isMuted(i.type,i.id));
+  if(!nm.length)return;
   const now=Date.now(),hasExp=nm.some(i=>i.expired);
   if(hasExp){if(now-getLastSound(SND_E)>=ALERT_INTERVAL){setLastSound(SND_E);playExpired();}}
   else{if(now-getLastSound(SND_N)>=ALERT_INTERVAL){setLastSound(SND_N);playAlert();}}
 }
 
 renderAll();
-// Toca na abertura se houver alertas e já passaram 10min desde o último som
 setTimeout(()=>{
   const items=collectAlerts();if(!items.length||S.muteAll)return;
   const nm=items.filter(i=>!isMuted(i.type,i.id));if(!nm.length)return;
   const hasExp=nm.some(i=>i.expired),key=hasExp?SND_E:SND_N;
   if(Date.now()-getLastSound(key)>=ALERT_INTERVAL){setLastSound(key);if(hasExp)playExpired();else playAlert();}
 },800);
-setInterval(checkAndAlert,10000);  // verifica a cada 10s, dispara a cada 10min
-setInterval(renderHome,30000);     // atualiza contadores regressivos a cada 30s
+setInterval(checkAndAlert,10000);
+setInterval(renderHome,30000);
 </script>
 </body>
 </html>"""
