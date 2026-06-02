@@ -50,6 +50,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .tab-btn.active{background:var(--text);color:var(--surface);border-color:transparent}
 .tab-btn:hover:not(.active){background:#f0efe8}
 .tab-badge{display:inline-block;font-size:10px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.tab-badge.green{background:var(--green)}
 #panels{padding:14px 16px}
 .panel{display:none}.panel.active{display:block}
 .sec-hdr{display:flex;align-items:center;gap:7px;margin:16px 0 8px}
@@ -69,10 +70,15 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .al-title{font-size:13px;font-weight:600;line-height:1.3}
 .al-sub{font-size:11px;opacity:.7;margin-top:2px}
 .al-actions{display:flex;align-items:center;gap:5px;margin-top:7px;flex-wrap:wrap}
+.al-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:8px}
+.chk-andamento{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;font-weight:600;color:inherit;opacity:.7;user-select:none}
+.chk-andamento:hover{opacity:1}
+.chk-andamento input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:#0C447C}
+.al.expired .chk-andamento{color:#fff}
 .btn-done{font-family:var(--font);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit}
 .btn-done:hover{background:rgba(0,0,0,.07)}
 .al.expired .btn-done{color:#fff;border-color:rgba(255,255,255,.5)}
-.btn-mute-item{font-family:var(--font);font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit;opacity:.5;margin-left:auto}
+.btn-mute-item{font-family:var(--font);font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit;opacity:.5}
 .btn-mute-item:hover{opacity:.9}
 .al.muted{animation:none !important;opacity:.6}
 .al.muted .btn-mute-item{opacity:1}
@@ -119,11 +125,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .pror-input-row{display:flex;align-items:center;gap:10px}
 .pror-input-row input{width:80px;padding:8px 10px;border-radius:7px;font-family:var(--font);font-size:14px;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--text);text-align:center;outline:none}
 .pror-input-row span{font-size:13px;color:var(--text2)}
+.done-card{background:var(--surface);border-radius:11px;border:.5px solid var(--border);padding:11px 14px;margin-bottom:7px;opacity:.8}
+.done-card-row{display:flex;align-items:flex-start;gap:10px}
+.done-icon{font-size:15px;color:var(--text2);flex-shrink:0;margin-top:2px}
+.done-title{font-size:13px;font-weight:600;color:var(--text);text-decoration:line-through;opacity:.6}
+.done-meta{font-size:11px;color:var(--text2);margin-top:3px}
+.done-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--green-bg);color:var(--green);margin-left:auto;flex-shrink:0}
+.btn-clear{font-family:var(--font);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;border:1.5px solid var(--red-border);background:transparent;cursor:pointer;color:var(--red-dark)}
+.btn-clear:hover{background:var(--red-bg)}
 </style>
 </head>
 <body>
 <div id="app">
-
 <div id="hdr">
   <div>
     <div class="logo"><i class="ti ti-layout-dashboard" style="font-size:15px;vertical-align:-1px;margin-right:6px"></i>Control Panel</div>
@@ -136,21 +149,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </button>
   </div>
 </div>
-
 <div id="tabs">
   <button class="tab-btn active" onclick="switchTab('home')"><i class="ti ti-home" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Início</button>
   <button class="tab-btn" onclick="switchTab('faturas')"><i class="ti ti-receipt" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Faturas<span class="tab-badge hidden" id="tb-faturas">0</span></button>
   <button class="tab-btn" onclick="switchTab('chamados')"><i class="ti ti-ticket" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Chamados<span class="tab-badge hidden" id="tb-chamados">0</span></button>
   <button class="tab-btn" onclick="switchTab('tarefas')"><i class="ti ti-check" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Tarefas<span class="tab-badge hidden" id="tb-tarefas">0</span></button>
+  <button class="tab-btn" onclick="switchTab('feito')"><i class="ti ti-circle-check" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Feito<span class="tab-badge green hidden" id="tb-feito">0</span></button>
 </div>
-
 <div id="panels">
   <div id="panel-home" class="panel active"><div id="home-content"></div></div>
   <div id="panel-faturas" class="panel">
-    <div id="fat-info" class="info-box">
-      <i class="ti ti-info-circle" style="font-size:14px;flex-shrink:0;margin-top:1px"></i>
-      <span id="fat-info-text"></span>
-    </div>
+    <div id="fat-info" class="info-box"><i class="ti ti-info-circle" style="font-size:14px;flex-shrink:0;margin-top:1px"></i><span id="fat-info-text"></span></div>
     <div id="fat-list"></div>
     <button class="btn-add" onclick="openModal('cliente')"><i class="ti ti-user-plus"></i>Cadastrar cliente para fatura</button>
   </div>
@@ -162,8 +171,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <div id="tar-list"></div>
     <button class="btn-add" onclick="openModal('tarefa')"><i class="ti ti-plus"></i>Nova tarefa</button>
   </div>
+  <div id="panel-feito" class="panel"><div id="feito-content"></div></div>
 </div>
-
 <div id="modal-bg" onclick="closeMBg(event)">
   <div class="modal">
     <h3 id="modal-title"></h3>
@@ -174,7 +183,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
   </div>
 </div>
-
 <div id="pror-bg" onclick="closeProrBg(event)">
   <div class="pror-box">
     <h3><i class="ti ti-clock-edit" style="font-size:14px;vertical-align:-1px;margin-right:5px"></i>Prorrogar prazo</h3>
@@ -192,7 +200,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
   </div>
 </div>
-
 </div>
 <script>
 const ALERT_INTERVAL=600000,SND_N='cp_snd_n',SND_E='cp_snd_e';
@@ -203,6 +210,8 @@ const S={
   fatDone:JSON.parse(localStorage.getItem('cp_fd')||'{}'),
   mutedItems:JSON.parse(localStorage.getItem('cp_muted')||'{}'),
   muteAll:JSON.parse(localStorage.getItem('cp_muteall')||'false'),
+  andamento:JSON.parse(localStorage.getItem('cp_andamento')||'{}'),
+  doneLog:JSON.parse(localStorage.getItem('cp_donelog')||'[]'),
   save(){
     localStorage.setItem('cp_cli',JSON.stringify(this.clients));
     localStorage.setItem('cp_cha',JSON.stringify(this.chamados));
@@ -210,26 +219,15 @@ const S={
     localStorage.setItem('cp_fd',JSON.stringify(this.fatDone));
     localStorage.setItem('cp_muted',JSON.stringify(this.mutedItems));
     localStorage.setItem('cp_muteall',JSON.stringify(this.muteAll));
+    localStorage.setItem('cp_andamento',JSON.stringify(this.andamento));
+    localStorage.setItem('cp_donelog',JSON.stringify(this.doneLog));
   }
 };
 let modalType=null,prorIdx=null,prorType=null,prorMode='h';
 
-function getFaturaAlertDate(t){
-  const n=new Date(),d=new Date(n.getFullYear(),n.getMonth(),t);
-  while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);
-  return d;
-}
-function isFaturaAlertToday(){
-  const today=new Date();today.setHours(0,0,0,0);
-  for(const b of[1,16]){const a=getFaturaAlertDate(b);a.setHours(0,0,0,0);if(a.getTime()===today.getTime())return true;}
-  return false;
-}
-function nextFaturaLabel(){
-  const n=new Date();n.setHours(0,0,0,0);const c=[];
-  for(const b of[1,16]){let d=getFaturaAlertDate(b);d.setHours(0,0,0,0);if(d>=n)c.push(d);const nm=new Date(n.getFullYear(),n.getMonth()+1,b);while(nm.getDay()===0||nm.getDay()===6)nm.setDate(nm.getDate()+1);nm.setHours(0,0,0,0);c.push(nm);}
-  c.sort((a,b)=>a-b);const nx=c.find(d=>d>=n)||c[0];const diff=Math.round((nx-n)/86400000);const fmt=nx.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});
-  if(diff===0)return`Hoje (${fmt}) — dia de faturamento!`;if(diff===1)return`Amanhã (${fmt})`;return`${fmt} — em ${diff} dia(s)`;
-}
+function getFaturaAlertDate(t){const n=new Date(),d=new Date(n.getFullYear(),n.getMonth(),t);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d;}
+function isFaturaAlertToday(){const today=new Date();today.setHours(0,0,0,0);for(const b of[1,16]){const a=getFaturaAlertDate(b);a.setHours(0,0,0,0);if(a.getTime()===today.getTime())return true;}return false;}
+function nextFaturaLabel(){const n=new Date();n.setHours(0,0,0,0);const c=[];for(const b of[1,16]){let d=getFaturaAlertDate(b);d.setHours(0,0,0,0);if(d>=n)c.push(d);const nm=new Date(n.getFullYear(),n.getMonth()+1,b);while(nm.getDay()===0||nm.getDay()===6)nm.setDate(nm.getDate()+1);nm.setHours(0,0,0,0);c.push(nm);}c.sort((a,b)=>a-b);const nx=c.find(d=>d>=n)||c[0];const diff=Math.round((nx-n)/86400000);const fmt=nx.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});if(diff===0)return`Hoje (${fmt}) — dia de faturamento!`;if(diff===1)return`Amanhã (${fmt})`;return`${fmt} — em ${diff} dia(s)`;}
 function todayKey(){return new Date().toDateString();}
 function isExpired(dl){return dl&&Date.now()>new Date(dl).getTime();}
 function msLeft(dl){return dl?new Date(dl).getTime()-Date.now():null;}
@@ -238,10 +236,10 @@ function formatDeadline(iso){const d=new Date(iso);return d.toLocaleDateString('
 function isMuted(t,id){return S.muteAll||!!S.mutedItems[`${t}_${id}`];}
 function toggleMuteItem(t,id){const k=`${t}_${id}`;S.mutedItems[k]=!S.mutedItems[k];S.save();renderAll();}
 function toggleMuteAll(){S.muteAll=!S.muteAll;S.save();renderAll();}
+function toggleAndamento(key){S.andamento[key]=!S.andamento[key];S.save();renderAll();}
+function logDone(type,title,sub,extra){S.doneLog.unshift({type,title,sub,extra,doneAt:new Date().toISOString()});S.save();}
 
-function beep(freq,dur,vol=0.15){
-  try{const ac=new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=freq;g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(vol,ac.currentTime+0.03);g.gain.linearRampToValueAtTime(0,ac.currentTime+dur);o.start(ac.currentTime);o.stop(ac.currentTime+dur+0.05);}catch(e){}
-}
+function beep(freq,dur,vol=0.15){try{const ac=new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=freq;g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(vol,ac.currentTime+0.03);g.gain.linearRampToValueAtTime(0,ac.currentTime+dur);o.start(ac.currentTime);o.stop(ac.currentTime+dur+0.05);}catch(e){}}
 function playAlert(){[0,.2,.4].forEach(t=>setTimeout(()=>beep(880,.18),t*1000));}
 function playExpired(){[700,900,700,900,700].forEach((f,i)=>setTimeout(()=>beep(f,.22,.22),i*180));}
 function playDone(){[523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.18,.1),i*120));}
@@ -250,20 +248,12 @@ function setLastSound(k){localStorage.setItem(k,Date.now().toString());}
 
 function collectAlerts(){
   const items=[],td=todayKey();
-  // Faturas: SÓ entra se hoje for dia de alerta (01 ou 16, ajustado para dia útil)
-  if(isFaturaAlertToday()){
-    S.clients.forEach((c,i)=>{
-      if(!S.fatDone[`${c}_${td}`])
-        items.push({type:'fatura',id:`fat_${i}`,cls:'red',icon:'ti-receipt',
-          title:`Enviar fatura para ${c}`,sub:'Dia de faturamento (ajustado para dia útil)',
-          expired:false,actions:[{label:'✓ Feito',fn:`markFatDone('${c}','${td}')`}]});
-    });
-  }
+  if(isFaturaAlertToday()){S.clients.forEach((c,i)=>{if(!S.fatDone[`${c}_${td}`])items.push({type:'fatura',id:`fat_${i}`,cls:'red',icon:'ti-receipt',title:`Enviar fatura para ${c}`,sub:'Dia de faturamento (ajustado para dia útil)',expired:false,actions:[{label:'✓ Feito',fn:`markFatDone('${c}','${td}')`}]});});}
   S.chamados.forEach((ch,i)=>{if(ch.done)return;const exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);if(exp||(ms!==null&&ms<7200000))items.push({type:'chamado',id:`cha_${i}`,cls:exp?'red':'yellow',icon:'ti-ticket',title:`Chamado #${ch.ticket} · Pedido ${ch.pedido}`,sub:formatMsLeft(ms),expired:exp,actions:[{label:'⏱ Prorrogar',fn:`openPror('chamado',${i})`},{label:'✓ Feito',fn:`doneChamado(${i})`}]});});
-  S.tarefas.forEach((t,i)=>{if(t.done)return;const exp=isExpired(t.deadline),ms=msLeft(t.deadline),urgente=exp||(ms!==null&&ms<7200000),proxima=!exp&&ms!==null&&ms<86400000*2;
-    if(t.prioridade==='alta'){if(exp)items.push({type:'tarefa',id:`tar_${i}`,cls:'expired',icon:'ti-flag',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Alta prioridade`,expired:true,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente||proxima)items.push({type:'tarefa',id:`tar_${i}`,cls:'red',icon:'ti-flag',title:`Tarefa urgente: ${t.titulo}`,sub:`Alta prioridade · ${formatMsLeft(ms)}`,expired:false,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
-    else if(t.prioridade==='media'){if(exp)items.push({type:'tarefa',id:`tar_${i}`,cls:'red',icon:'ti-flag-2',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Média prioridade`,expired:true,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente||proxima)items.push({type:'tarefa',id:`tar_${i}`,cls:'yellow',icon:'ti-flag-2',title:`Tarefa: ${t.titulo}`,sub:`Média prioridade · ${formatMsLeft(ms)}`,expired:false,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
-    else if(t.prioridade==='baixa'){if(exp)items.push({type:'tarefa',id:`tar_bl_${i}`,cls:'red',icon:'ti-flag-3',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Baixa prioridade`,expired:true,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente)items.push({type:'tarefa',id:`tar_bl_${i}`,cls:'yellow',icon:'ti-flag-3',title:`Tarefa: ${t.titulo}`,sub:`Baixa prioridade · ${formatMsLeft(ms)}`,expired:false,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
+  S.tarefas.forEach((t,i)=>{if(t.done)return;const exp=isExpired(t.deadline),ms=msLeft(t.deadline),urgente=exp||(ms!==null&&ms<7200000),proxima=!exp&&ms!==null&&ms<86400000*2,aKey=`tar_${i}`;
+    if(t.prioridade==='alta'){if(exp)items.push({type:'tarefa',id:aKey,cls:'expired',icon:'ti-flag',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Alta`,expired:true,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente||proxima)items.push({type:'tarefa',id:aKey,cls:'red',icon:'ti-flag',title:`Tarefa urgente: ${t.titulo}`,sub:`Alta prioridade · ${formatMsLeft(ms)}`,expired:false,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
+    else if(t.prioridade==='media'){if(exp)items.push({type:'tarefa',id:aKey,cls:'red',icon:'ti-flag-2',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Média`,expired:true,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente||proxima)items.push({type:'tarefa',id:aKey,cls:'yellow',icon:'ti-flag-2',title:`Tarefa: ${t.titulo}`,sub:`Média prioridade · ${formatMsLeft(ms)}`,expired:false,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
+    else if(t.prioridade==='baixa'){if(exp)items.push({type:'tarefa',id:`tar_bl_${i}`,cls:'red',icon:'ti-flag-3',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')} · Baixa`,expired:true,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente)items.push({type:'tarefa',id:`tar_bl_${i}`,cls:'yellow',icon:'ti-flag-3',title:`Tarefa: ${t.titulo}`,sub:`Baixa prioridade · ${formatMsLeft(ms)}`,expired:false,andKey:aKey,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
   });
   return items;
 }
@@ -272,31 +262,32 @@ function renderHome(){
   const items=collectAlerts(),el=document.getElementById('home-content');
   const urgent=items.filter(i=>i.cls==='red'||i.cls==='expired'),attn=items.filter(i=>i.cls==='yellow');
   let html='';
-  function renderSection(list,label,countCls){if(!list.length)return'';let h=`<div class="sec-hdr"><span class="sec-title">${label}</span><span class="sec-count ${countCls}">${list.length}</span></div>`;list.forEach(item=>{const mt=isMuted(item.type,item.id);const btns=item.actions.map(a=>`<button class="btn-done" onclick="${a.fn}">${a.label}</button>`).join('');const mb=`<button class="btn-mute-item" onclick="toggleMuteItem('${item.type}','${item.id.replace(/'/g,"\\'")}')"><i class="ti ${mt?'ti-volume-off':'ti-volume-3'}"></i> ${mt?'Mutado':'Mutar'}</button>`;h+=`<div class="al ${item.cls}${mt?' muted':''}"><i class="ti ${item.icon} al-icon"></i><div class="al-body"><div class="al-title">${item.title}</div><div class="al-sub">${item.sub}</div><div class="al-actions">${btns}${mb}</div></div></div>`;});return h;}
+  function renderSection(list,label,countCls){if(!list.length)return'';let h=`<div class="sec-hdr"><span class="sec-title">${label}</span><span class="sec-count ${countCls}">${list.length}</span></div>`;
+    list.forEach(item=>{const mt=isMuted(item.type,item.id);const btns=item.actions.map(a=>`<button class="btn-done" onclick="${a.fn}">${a.label}</button>`).join('');const mb=`<button class="btn-mute-item" onclick="toggleMuteItem('${item.type}','${item.id.replace(/'/g,"\\'")}')"><i class="ti ${mt?'ti-volume-off':'ti-volume-3'}"></i> ${mt?'Mutado':'Mutar'}</button>`;
+      const andKey=item.andKey||null,isAnd=andKey?!!S.andamento[andKey]:false;
+      const andCb=andKey?`<label class="chk-andamento"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${andKey}')"/> Em andamento</label>`:'';
+      h+=`<div class="al ${item.cls}${mt?' muted':''}"><i class="ti ${item.icon} al-icon"></i><div class="al-body"><div class="al-title">${item.title}</div><div class="al-sub">${item.sub}</div><div class="al-actions">${btns}</div><div class="al-footer">${andCb}<div style="display:flex;gap:5px;margin-left:auto">${mb}</div></div></div></div>`;});return h;}
   if(!items.length){html='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="color:#3B6D11;opacity:.7"></i>Tudo em dia! Nenhum alerta pendente.</div>';}
   else{html+=renderSection(urgent,'Atenção imediata','');html+=renderSection(attn,'Acompanhamento','yellow');}
   const allCha=S.chamados.filter(c=>!c.done),allT=S.tarefas.filter(t=>!t.done);
   if(allCha.length||allT.length){html+=`<div class="divider" style="margin:14px 0 10px"></div><div class="sec-hdr"><span class="sec-title">Todas as pendências</span></div>`;
     allCha.forEach((ch,i)=>{const exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);html+=`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓</button></div></div>`;});
-    allT.forEach((t,i)=>{const exp=isExpired(t.deadline),ms=msLeft(t.deadline);html+=`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':t.prioridade}">${exp?'VENCIDO':t.prioridade.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓</button></div></div>`;});
+    allT.forEach((t,i)=>{const exp=isExpired(t.deadline),ms=msLeft(t.deadline),aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];html+=`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}${isAnd?' <span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px;vertical-align:1px">EM ANDAMENTO</span>':''}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':t.prioridade}">${exp?'VENCIDO':t.prioridade.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓</button></div></div>`;});
   }
   el.innerHTML=html;updateBadges(items);
 }
-function updateBadges(items){const n=items.length,el=document.getElementById('badge-total');if(n>0){el.textContent=n+(n===1?' alerta':' alertas');el.classList.remove('hidden')}else el.classList.add('hidden');function b(id,n){const x=document.getElementById(id);if(n>0){x.textContent=n;x.classList.remove('hidden')}else x.classList.add('hidden')}b('tb-faturas',items.filter(i=>i.type==='fatura').length);b('tb-chamados',items.filter(i=>i.type==='chamado').length);b('tb-tarefas',items.filter(i=>i.type==='tarefa').length);}
+function updateBadges(items){const n=items.length,el=document.getElementById('badge-total');if(n>0){el.textContent=n+(n===1?' alerta':' alertas');el.classList.remove('hidden')}else el.classList.add('hidden');function b(id,n){const x=document.getElementById(id);if(n>0){x.textContent=n;x.classList.remove('hidden')}else x.classList.add('hidden')}b('tb-faturas',items.filter(i=>i.type==='fatura').length);b('tb-chamados',items.filter(i=>i.type==='chamado').length);b('tb-tarefas',items.filter(i=>i.type==='tarefa').length);const nd=S.doneLog.length;const bd=document.getElementById('tb-feito');if(nd>0){bd.textContent=nd;bd.classList.remove('hidden')}else bd.classList.add('hidden');}
 function updateMuteBtn(){document.getElementById('mute-icon').className=S.muteAll?'ti ti-volume-off':'ti ti-volume';document.getElementById('mute-label').textContent=S.muteAll?'Som mutado':'Som ativo';document.getElementById('btn-muteall').classList.toggle('muted',S.muteAll);}
-function renderFaturas(){
-  document.getElementById('fat-info-text').textContent=`Próximo lembrete de fatura: ${nextFaturaLabel()}. Os alertas dos dias 01 e 16 são movidos para o próximo dia útil se caírem em fim de semana.`;
-  const el=document.getElementById('fat-list');if(!S.clients.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i>Nenhum cliente cadastrado</div>';return;}
-  const td=todayKey(),isAD=isFaturaAlertToday();
-  el.innerHTML=S.clients.map((c,i)=>{const done=S.fatDone[`${c}_${td}`];return`<div class="card"><div class="card-row"><i class="ti ti-building" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title" style="${done?'text-decoration:line-through;opacity:.45':''}">${c}</div><div class="card-sub">${isAD&&!done?'Hoje é dia de faturamento':'Próximo: '+nextFaturaLabel()}</div></div><span class="tag ${isAD&&!done?'alta':'ok'}">${isAD&&!done?'HOJE':'OK'}</span><button class="btn-sm del" onclick="removeCli(${i})" style="margin-left:6px"><i class="ti ti-trash"></i></button></div></div>`;}).join('');
-}
+function renderFaturas(){document.getElementById('fat-info-text').textContent=`Próximo lembrete de fatura: ${nextFaturaLabel()}. Os alertas dos dias 01 e 16 são movidos para o próximo dia útil se caírem em fim de semana.`;const el=document.getElementById('fat-list');if(!S.clients.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i>Nenhum cliente cadastrado</div>';return;}const td=todayKey(),isAD=isFaturaAlertToday();el.innerHTML=S.clients.map((c,i)=>{const done=S.fatDone[`${c}_${td}`];return`<div class="card"><div class="card-row"><i class="ti ti-building" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title" style="${done?'text-decoration:line-through;opacity:.45':''}">${c}</div><div class="card-sub">${isAD&&!done?'Hoje é dia de faturamento':'Próximo: '+nextFaturaLabel()}</div></div><span class="tag ${isAD&&!done?'alta':'ok'}">${isAD&&!done?'HOJE':'OK'}</span><button class="btn-sm del" onclick="removeCli(${i})" style="margin-left:6px"><i class="ti ti-trash"></i></button></div></div>`;}).join('');}
 function renderChamados(){const el=document.getElementById('cha-list'),ativos=S.chamados.filter(c=>!c.done);if(!ativos.length){el.innerHTML='<div class="empty"><i class="ti ti-ticket"></i>Nenhum chamado aberto</div>';return;}el.innerHTML=ativos.map(ch=>{const i=S.chamados.indexOf(ch),exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);return`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓ Feito</button></div></div>`;}).join('');}
-function renderTarefas(){const el=document.getElementById('tar-list'),ativas=S.tarefas.filter(t=>!t.done);if(!ativas.length){el.innerHTML='<div class="empty"><i class="ti ti-check"></i>Nenhuma tarefa pendente</div>';return;}const ord=['alta','media','baixa'];el.innerHTML=[...ativas].sort((a,b)=>ord.indexOf(a.prioridade)-ord.indexOf(b.prioridade)).map(t=>{const i=S.tarefas.indexOf(t),exp=isExpired(t.deadline),ms=msLeft(t.deadline);return`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':t.prioridade}">${exp?'VENCIDO':t.prioridade.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓ Feito</button></div></div>`;}).join('');}
-function renderAll(){renderHome();renderFaturas();renderChamados();renderTarefas();updateMuteBtn();}
+function renderTarefas(){const el=document.getElementById('tar-list'),ativas=S.tarefas.filter(t=>!t.done);if(!ativas.length){el.innerHTML='<div class="empty"><i class="ti ti-check"></i>Nenhuma tarefa pendente</div>';return;}const ord=['alta','media','baixa'];el.innerHTML=[...ativas].sort((a,b)=>ord.indexOf(a.prioridade)-ord.indexOf(b.prioridade)).map(t=>{const i=S.tarefas.indexOf(t),exp=isExpired(t.deadline),ms=msLeft(t.deadline),aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];return`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':t.prioridade}">${exp?'VENCIDO':t.prioridade.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓ Feito</button></div><div style="margin-top:8px;padding-top:8px;border-top:.5px solid #e0dfd8"><label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:11px;font-weight:600;color:#6b6b6b;user-select:none"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${aKey}')" style="width:14px;height:14px;cursor:pointer;accent-color:#0C447C"/> Em andamento ${isAnd?'<span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px">✓ Ciente</span>':''}</label></div></div>`;}).join('');}
+function renderFeito(){const el=document.getElementById('feito-content');if(!S.doneLog.length){el.innerHTML='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="opacity:.3"></i>Nenhum item concluído ainda.</div>';return;}const icons={fatura:'ti-receipt',chamado:'ti-ticket',tarefa:'ti-flag'};const labels={fatura:'Fatura',chamado:'Chamado',tarefa:'Tarefa'};let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:12px;color:#6b6b6b">${S.doneLog.length} item(ns) concluído(s)</span><button class="btn-clear" onclick="clearDoneLog()"><i class="ti ti-trash" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Limpar tudo</button></div>`;S.doneLog.forEach(entry=>{const d=new Date(entry.doneAt),dateStr=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}),timeStr=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});const extraTag=entry.extra?`<span class="tag ${entry.extra}" style="margin-left:6px">${entry.extra.toUpperCase()}</span>`:'';html+=`<div class="done-card"><div class="done-card-row"><i class="ti ${icons[entry.type]||'ti-check'} done-icon"></i><div style="flex:1;min-width:0"><div class="done-title">${entry.title}</div><div class="done-meta">${labels[entry.type]||'Item'} · Concluído em ${dateStr} às ${timeStr}${entry.sub?' · '+entry.sub:''}</div></div>${extraTag}<span class="done-tag" style="margin-left:8px">✓ Feito</span></div></div>`;});el.innerHTML=html;}
+function clearDoneLog(){if(!confirm('Limpar todo o histórico de itens concluídos?'))return;S.doneLog=[];S.save();renderAll();}
+function renderAll(){renderHome();renderFaturas();renderChamados();renderTarefas();renderFeito();updateMuteBtn();}
 
-function markFatDone(c,td){playDone();S.fatDone[`${c}_${td}`]=true;S.save();renderAll();}
-function doneChamado(i){playDone();S.chamados[i].done=true;S.save();renderAll();}
-function doneTarefa(i){playDone();S.tarefas[i].done=true;S.save();renderAll();}
+function markFatDone(c,td){playDone();logDone('fatura',`Fatura para ${c}`,'Dia de faturamento confirmado');S.fatDone[`${c}_${td}`]=true;S.save();renderAll();}
+function doneChamado(i){playDone();const ch=S.chamados[i];logDone('chamado',`Chamado #${ch.ticket} · Pedido ${ch.pedido}`,ch.deadline?`Prazo: ${formatDeadline(ch.deadline)}`:'');S.chamados[i].done=true;S.save();renderAll();}
+function doneTarefa(i){playDone();const t=S.tarefas[i];logDone('tarefa',t.titulo,t.deadline?`Prazo: ${formatDeadline(t.deadline)}`:'',t.prioridade);delete S.andamento[`tar_${i}`];S.tarefas[i].done=true;S.save();renderAll();}
 function removeCli(i){S.clients.splice(i,1);S.save();renderAll();}
 
 function openPror(type,i){prorType=type;prorIdx=i;prorMode='h';document.getElementById('pror-val').value=4;document.getElementById('pror-tab-h').classList.add('active');document.getElementById('pror-tab-d').classList.remove('active');document.getElementById('pror-unit-label').textContent='horas';document.getElementById('pror-bg').classList.add('open');}
@@ -304,50 +295,17 @@ function closePror(){document.getElementById('pror-bg').classList.remove('open')
 function closeProrBg(e){if(e.target.id==='pror-bg')closePror();}
 function setProrMode(m){prorMode=m;document.getElementById('pror-tab-h').classList.toggle('active',m==='h');document.getElementById('pror-tab-d').classList.toggle('active',m==='d');document.getElementById('pror-unit-label').textContent=m==='h'?'horas':'dias úteis';document.getElementById('pror-val').value=m==='h'?4:2;}
 function confirmPror(){const val=parseInt(document.getElementById('pror-val').value)||1;const obj=prorType==='chamado'?S.chamados[prorIdx]:S.tarefas[prorIdx];const base=obj.deadline&&new Date(obj.deadline)>new Date()?new Date(obj.deadline):new Date();if(prorMode==='h'){base.setTime(base.getTime()+val*3600000);}else{let added=0,cur=new Date(base);while(added<val){cur.setDate(cur.getDate()+1);if(cur.getDay()!==0&&cur.getDay()!==6)added++;}base.setTime(cur.getTime());}obj.deadline=base.toISOString();S.save();closePror();renderAll();}
-
 function switchTab(t){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector(`.tab-btn[onclick*="'${t}'"]`).classList.add('active');document.getElementById(`panel-${t}`).classList.add('active');}
 
-function openModal(type){
-  modalType=type;document.getElementById('modal-title').textContent={chamado:'Novo chamado',tarefa:'Nova tarefa',cliente:'Cadastrar cliente'}[type];
-  const now=new Date(),todayStr=now.toISOString().split('T')[0],timeStr=now.toTimeString().slice(0,5);
-  const hint=`<div style="font-size:11px;color:#6b6b6b;margin-top:-6px;margin-bottom:8px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>O alerta disparará ao atingir essa data e horário (Brasília)</div>`;
-  const bodies={
-    chamado:`<div class="field-row"><div class="field"><label>Número do ticket</label><input id="m-ticket" placeholder="TKT-001"/></div><div class="field"><label>Número do pedido</label><input id="m-pedido" placeholder="PED-001"/></div></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div><div class="field"><label>Horário limite</label><input id="m-hora" type="time" value="${timeStr}"/></div>${hint}`,
-    tarefa:`<div class="field"><label>Título</label><input id="m-titulo" placeholder="Ex: Revisar relatório"/></div><div class="field"><label>Prioridade</label><select id="m-pri"><option value="alta">Alta — urgente</option><option value="media" selected>Média</option><option value="baixa">Baixa</option></select></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div><div class="field"><label>Horário limite</label><input id="m-hora" type="time" value="${timeStr}"/></div>${hint}`,
-    cliente:`<div class="field"><label>Nome do cliente</label><input id="m-cli" placeholder="Ex: Empresa ABC"/></div>`
-  };
-  document.getElementById('modal-body').innerHTML=bodies[type];
-  if(type==='tarefa'){const d=new Date();d.setDate(d.getDate()+3);document.getElementById('m-data').value=d.toISOString().split('T')[0];}
-  document.getElementById('modal-bg').classList.add('open');
-}
+function openModal(type){modalType=type;document.getElementById('modal-title').textContent={chamado:'Novo chamado',tarefa:'Nova tarefa',cliente:'Cadastrar cliente'}[type];const now=new Date(),todayStr=now.toISOString().split('T')[0],timeStr=now.toTimeString().slice(0,5);const hint=`<div style="font-size:11px;color:#6b6b6b;margin-top:-6px;margin-bottom:8px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>O alerta disparará ao atingir essa data e horário (Brasília)</div>`;const bodies={chamado:`<div class="field-row"><div class="field"><label>Número do ticket</label><input id="m-ticket" placeholder="TKT-001"/></div><div class="field"><label>Número do pedido</label><input id="m-pedido" placeholder="PED-001"/></div></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div><div class="field"><label>Horário limite</label><input id="m-hora" type="time" value="${timeStr}"/></div>${hint}`,tarefa:`<div class="field"><label>Título</label><input id="m-titulo" placeholder="Ex: Revisar relatório"/></div><div class="field"><label>Prioridade</label><select id="m-pri"><option value="alta">Alta — urgente</option><option value="media" selected>Média</option><option value="baixa">Baixa</option></select></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div><div class="field"><label>Horário limite</label><input id="m-hora" type="time" value="${timeStr}"/></div>${hint}`,cliente:`<div class="field"><label>Nome do cliente</label><input id="m-cli" placeholder="Ex: Empresa ABC"/></div>`};document.getElementById('modal-body').innerHTML=bodies[type];if(type==='tarefa'){const d=new Date();d.setDate(d.getDate()+3);document.getElementById('m-data').value=d.toISOString().split('T')[0];}document.getElementById('modal-bg').classList.add('open');}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
 function closeMBg(e){if(e.target.id==='modal-bg')closeModal();}
-function saveModal(){
-  if(modalType==='chamado'){const t=document.getElementById('m-ticket').value.trim(),p=document.getElementById('m-pedido').value.trim(),data=document.getElementById('m-data').value,hora=document.getElementById('m-hora').value;if(!t||!p||!data||!hora)return alert('Preencha todos os campos.');S.chamados.push({ticket:t,pedido:p,deadline:new Date(`${data}T${hora}:00`).toISOString(),createdAt:new Date().toISOString(),done:false});}
-  else if(modalType==='tarefa'){const t=document.getElementById('m-titulo').value.trim(),pr=document.getElementById('m-pri').value,data=document.getElementById('m-data').value,hora=document.getElementById('m-hora').value;if(!t||!data||!hora)return alert('Preencha todos os campos.');S.tarefas.push({titulo:t,prioridade:pr,deadline:new Date(`${data}T${hora}:00`).toISOString(),createdAt:new Date().toISOString(),done:false});}
-  else if(modalType==='cliente'){const c=document.getElementById('m-cli').value.trim();if(!c)return alert('Digite o nome do cliente.');S.clients.push(c);}
-  S.save();closeModal();renderAll();
-}
+function saveModal(){if(modalType==='chamado'){const t=document.getElementById('m-ticket').value.trim(),p=document.getElementById('m-pedido').value.trim(),data=document.getElementById('m-data').value,hora=document.getElementById('m-hora').value;if(!t||!p||!data||!hora)return alert('Preencha todos os campos.');S.chamados.push({ticket:t,pedido:p,deadline:new Date(`${data}T${hora}:00`).toISOString(),createdAt:new Date().toISOString(),done:false});}else if(modalType==='tarefa'){const t=document.getElementById('m-titulo').value.trim(),pr=document.getElementById('m-pri').value,data=document.getElementById('m-data').value,hora=document.getElementById('m-hora').value;if(!t||!data||!hora)return alert('Preencha todos os campos.');S.tarefas.push({titulo:t,prioridade:pr,deadline:new Date(`${data}T${hora}:00`).toISOString(),createdAt:new Date().toISOString(),done:false});}else if(modalType==='cliente'){const c=document.getElementById('m-cli').value.trim();if(!c)return alert('Digite o nome do cliente.');S.clients.push(c);}S.save();closeModal();renderAll();}
 
-// Som só toca se houver alertas reais na lista
-function checkAndAlert(){
-  if(S.muteAll)return;
-  const items=collectAlerts();
-  if(!items.length)return;  // sem alertas = sem som
-  const nm=items.filter(i=>!isMuted(i.type,i.id));
-  if(!nm.length)return;
-  const now=Date.now(),hasExp=nm.some(i=>i.expired);
-  if(hasExp){if(now-getLastSound(SND_E)>=ALERT_INTERVAL){setLastSound(SND_E);playExpired();}}
-  else{if(now-getLastSound(SND_N)>=ALERT_INTERVAL){setLastSound(SND_N);playAlert();}}
-}
+function checkAndAlert(){if(S.muteAll)return;const items=collectAlerts();if(!items.length)return;const nm=items.filter(i=>!isMuted(i.type,i.id));if(!nm.length)return;const now=Date.now(),hasExp=nm.some(i=>i.expired);if(hasExp){if(now-getLastSound(SND_E)>=ALERT_INTERVAL){setLastSound(SND_E);playExpired();}}else{if(now-getLastSound(SND_N)>=ALERT_INTERVAL){setLastSound(SND_N);playAlert();}}}
 
 renderAll();
-setTimeout(()=>{
-  const items=collectAlerts();if(!items.length||S.muteAll)return;
-  const nm=items.filter(i=>!isMuted(i.type,i.id));if(!nm.length)return;
-  const hasExp=nm.some(i=>i.expired),key=hasExp?SND_E:SND_N;
-  if(Date.now()-getLastSound(key)>=ALERT_INTERVAL){setLastSound(key);if(hasExp)playExpired();else playAlert();}
-},800);
+setTimeout(()=>{const items=collectAlerts();if(!items.length||S.muteAll)return;const nm=items.filter(i=>!isMuted(i.type,i.id));if(!nm.length)return;const hasExp=nm.some(i=>i.expired),key=hasExp?SND_E:SND_N;if(Date.now()-getLastSound(key)>=ALERT_INTERVAL){setLastSound(key);if(hasExp)playExpired();else playAlert();}},800);
 setInterval(checkAndAlert,10000);
 setInterval(renderHome,30000);
 </script>
