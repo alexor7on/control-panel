@@ -1,18 +1,26 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Control Panel", page_icon="🗂️", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Painel de Controle", page_icon="🗂️", layout="centered", initial_sidebar_state="collapsed")
 st.markdown("""<style>.block-container{padding:0!important;max-width:100%!important}header,footer,#MainMenu{display:none!important}</style>""", unsafe_allow_html=True)
 
-HTML = """<!DOCTYPE html>
+HTML = r"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--red:#E24B4A;--red-bg:#FCEBEB;--red-dark:#791F1F;--red-border:#F09595;--yellow:#BA7517;--yellow-bg:#FAEEDA;--yellow-dark:#633806;--yellow-border:#FAC775;--green:#3B6D11;--green-bg:#EAF3DE;--blue-bg:#E6F1FB;--blue-dark:#0C447C;--blue-border:#85B7EB;--bg:#f5f4f0;--surface:#fff;--border:#e0dfd8;--text:#1a1a1a;--text2:#6b6b6b;--font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace}
+:root{
+  --red:#E24B4A;--red-bg:#FCEBEB;--red-dark:#791F1F;--red-border:#F09595;
+  --yellow:#BA7517;--yellow-bg:#FAEEDA;--yellow-dark:#633806;--yellow-border:#FAC775;
+  --green:#3B6D11;--green-bg:#EAF3DE;
+  --blue-bg:#E6F1FB;--blue-dark:#0C447C;--blue-border:#85B7EB;
+  --purple:#6B3FA0;--purple-bg:#F2EBF9;--purple-border:#C4A0E8;--purple-dark:#3D1F61;
+  --bg:#f5f4f0;--surface:#fff;--border:#d4d2cb;--text:#1a1a1a;--text2:#6b6b6b;
+  --font:'Sora',sans-serif;--mono:'JetBrains Mono',monospace;
+}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
 #app{max-width:720px;margin:0 auto;background:var(--surface);min-height:100vh;border-left:.5px solid var(--border);border-right:.5px solid var(--border)}
 #hdr{padding:14px 16px 10px;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:10px}
@@ -22,16 +30,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 #badge-total{font-size:11px;font-weight:700;background:var(--red);color:#fff;border-radius:20px;padding:2px 9px}
 #badge-total.hidden{display:none}
 .btn-muteall{font-family:var(--font);font-size:11px;font-weight:600;padding:5px 11px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:5px}
-.btn-muteall:hover{background:#f0efe8}.btn-muteall.muted{background:#f0efe8;color:#aaa;border-color:var(--border)}
+.btn-muteall:hover{background:#f0efe8}.btn-muteall.muted{background:#f0efe8;color:#aaa}
 #tabs{display:flex;gap:5px;padding:12px 16px 0;overflow-x:auto}
 .tab-btn{font-family:var(--font);font-size:12px;font-weight:600;padding:6px 13px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;color:var(--text2);white-space:nowrap;transition:.15s}
-.tab-btn.active{background:var(--text);color:var(--surface);border-color:transparent}.tab-btn:hover:not(.active){background:#f0efe8}
+.tab-btn.active{background:var(--text);color:var(--surface);border-color:transparent}
+.tab-btn:hover:not(.active){background:#f0efe8}
 .tab-badge{display:inline-block;font-size:10px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;margin-left:4px;vertical-align:1px}
-.tab-badge.green{background:var(--green)}
+.tab-badge.green{background:var(--green)}.tab-badge.purple{background:var(--purple)}
 #panels{padding:14px 16px}.panel{display:none}.panel.active{display:block}
 .sec-hdr{display:flex;align-items:center;gap:7px;margin:16px 0 8px}.sec-hdr:first-child{margin-top:0}
 .sec-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2)}
-.sec-count{font-size:10px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px}.sec-count.yellow{background:var(--yellow)}
+.sec-count{font-size:10px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px}
+.sec-count.yellow{background:var(--yellow)}
 .al{border-radius:10px;padding:11px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px;border:1.5px solid transparent}
 .al.red{background:var(--red-bg);border-color:var(--red-border);animation:pulse-r 1.8s infinite}
 .al.yellow{background:var(--yellow-bg);border-color:var(--yellow-border);animation:pulse-y 2.5s infinite}
@@ -45,12 +55,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .al-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:8px}
 .chk-andamento{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;font-weight:600;color:inherit;opacity:.7;user-select:none}
 .chk-andamento:hover{opacity:1}.chk-andamento input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:#0C447C}
-.al.expired .chk-andamento{color:#fff}
+.al.expired .chk-andamento,.al.expired .btn-done{color:#fff;border-color:rgba(255,255,255,.5)}
 .btn-done{font-family:var(--font);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit}
-.btn-done:hover{background:rgba(0,0,0,.07)}.al.expired .btn-done{color:#fff;border-color:rgba(255,255,255,.5)}
+.btn-done:hover{background:rgba(0,0,0,.07)}
 .btn-mute-item{font-family:var(--font);font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;border:1.5px solid currentColor;background:transparent;cursor:pointer;color:inherit;opacity:.5}
 .btn-mute-item:hover{opacity:.9}.al.muted{animation:none!important;opacity:.6}.al.muted .btn-mute-item{opacity:1}
-.card{background:var(--surface);border-radius:11px;border:.5px solid var(--border);padding:12px 14px;margin-bottom:7px}
+/* CARD com borda mais grossa */
+.card{background:var(--surface);border-radius:11px;border:2px solid var(--border);padding:12px 14px;margin-bottom:7px}
 .card-row{display:flex;align-items:center;gap:8px}
 .card-title{font-size:13px;font-weight:600;flex:1}.card-sub{font-size:11px;color:var(--text2);margin-top:2px}
 .tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:.03em}
@@ -87,7 +98,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .pror-input-row{display:flex;align-items:center;gap:10px}
 .pror-input-row input{width:80px;padding:8px 10px;border-radius:7px;font-family:var(--font);font-size:14px;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--text);text-align:center;outline:none}
 .pror-input-row span{font-size:13px;color:var(--text2)}
-.done-card{background:var(--surface);border-radius:11px;border:.5px solid var(--border);padding:11px 14px;margin-bottom:7px;opacity:.8}
+.done-card{background:var(--surface);border-radius:11px;border:2px solid var(--border);padding:11px 14px;margin-bottom:7px;opacity:.8}
 .done-card-row{display:flex;align-items:flex-start;gap:10px}
 .done-icon{font-size:15px;color:var(--text2);flex-shrink:0;margin-top:2px}
 .done-title{font-size:13px;font-weight:600;text-decoration:line-through;opacity:.6}
@@ -95,12 +106,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .done-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--green-bg);color:var(--green);margin-left:auto;flex-shrink:0}
 .btn-clear{font-family:var(--font);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;border:1.5px solid var(--red-border);background:transparent;cursor:pointer;color:var(--red-dark)}
 .btn-clear:hover{background:var(--red-bg)}
+/* TEMAS 1:1 */
+.tema-card{background:var(--surface);border-radius:11px;border:2px solid var(--purple-border);padding:13px 15px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+.tema-icon{font-size:16px;color:var(--purple);flex-shrink:0;margin-top:1px}
+.tema-body{flex:1;min-width:0}
+.tema-title{font-size:13px;font-weight:600;color:var(--text)}
+.tema-meta{font-size:11px;color:var(--text2);margin-top:3px}
+.tema-header{background:var(--purple-bg);border:1.5px solid var(--purple-border);border-radius:10px;padding:11px 14px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.tema-header-text{font-size:13px;font-weight:600;color:var(--purple-dark)}
+.tema-header-sub{font-size:11px;color:var(--purple);opacity:.8;margin-top:2px}
+/* TIME PICKER */
+.time-picker-row{display:flex;gap:8px}.time-picker-row .field{flex:1}
 </style>
 </head>
 <body>
 <div id="app">
 <div id="hdr">
-  <div><div class="logo"><i class="ti ti-layout-dashboard" style="font-size:15px;vertical-align:-1px;margin-right:6px"></i>Control Panel</div><div class="sub">Gerenciador interno de trabalho</div></div>
+  <div><div class="logo"><i class="ti ti-layout-dashboard" style="font-size:15px;vertical-align:-1px;margin-right:6px"></i>Painel de Controle</div><div class="sub">Gerenciador interno de trabalho</div></div>
   <div class="hdr-right"><span id="badge-total" class="hidden">0</span><button class="btn-muteall" id="btn-muteall" onclick="toggleMuteAll()"><i class="ti ti-volume" id="mute-icon"></i><span id="mute-label">Som ativo</span></button></div>
 </div>
 <div id="tabs">
@@ -108,6 +130,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <button class="tab-btn" onclick="switchTab('faturas')"><i class="ti ti-receipt" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Faturas<span class="tab-badge hidden" id="tb-faturas">0</span></button>
   <button class="tab-btn" onclick="switchTab('chamados')"><i class="ti ti-ticket" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Chamados<span class="tab-badge hidden" id="tb-chamados">0</span></button>
   <button class="tab-btn" onclick="switchTab('tarefas')"><i class="ti ti-check" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Tarefas<span class="tab-badge hidden" id="tb-tarefas">0</span></button>
+  <button class="tab-btn" onclick="switchTab('temas')"><i class="ti ti-users" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Temas 1:1<span class="tab-badge purple hidden" id="tb-temas">0</span></button>
   <button class="tab-btn" onclick="switchTab('feito')"><i class="ti ti-circle-check" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Feito<span class="tab-badge green hidden" id="tb-feito">0</span></button>
 </div>
 <div id="panels">
@@ -115,6 +138,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div id="panel-faturas" class="panel"><div id="fat-info" class="info-box"><i class="ti ti-info-circle" style="font-size:14px;flex-shrink:0;margin-top:1px"></i><span id="fat-info-text"></span></div><div id="fat-list"></div><button class="btn-add" onclick="openModal('cliente')"><i class="ti ti-user-plus"></i>Cadastrar cliente para fatura</button></div>
   <div id="panel-chamados" class="panel"><div id="cha-list"></div><button class="btn-add" onclick="openModal('chamado')"><i class="ti ti-plus"></i>Novo chamado</button></div>
   <div id="panel-tarefas" class="panel"><div id="tar-list"></div><button class="btn-add" onclick="openModal('tarefa')"><i class="ti ti-plus"></i>Nova tarefa</button></div>
+  <div id="panel-temas" class="panel">
+    <div class="tema-header"><i class="ti ti-users" style="font-size:18px;color:var(--purple)"></i><div><div class="tema-header-text">Temas para próxima 1:1</div><div class="tema-header-sub">Itens cadastrados aqui aparecem apenas nesta aba</div></div></div>
+    <div id="temas-list"></div>
+    <button class="btn-add" style="border-color:var(--purple-border);color:var(--purple-dark)" onclick="openModal('tema')"><i class="ti ti-plus"></i>Incluir tema</button>
+  </div>
   <div id="panel-feito" class="panel"><div id="feito-content"></div></div>
 </div>
 <div id="modal-bg" onclick="closeMBg(event)"><div class="modal"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-btns"><button class="btn-canc" onclick="closeModal()">Cancelar</button><button class="btn-prim" onclick="saveModal()">Salvar</button></div></div></div>
@@ -131,6 +159,7 @@ const S={
   muteAll:JSON.parse(localStorage.getItem('cp_muteall')||'false'),
   andamento:JSON.parse(localStorage.getItem('cp_andamento')||'{}'),
   doneLog:JSON.parse(localStorage.getItem('cp_donelog')||'[]'),
+  temas:JSON.parse(localStorage.getItem('cp_temas')||'[]'),
   save(){
     localStorage.setItem('cp_cli',JSON.stringify(this.clients));
     localStorage.setItem('cp_cha',JSON.stringify(this.chamados));
@@ -140,48 +169,28 @@ const S={
     localStorage.setItem('cp_muteall',JSON.stringify(this.muteAll));
     localStorage.setItem('cp_andamento',JSON.stringify(this.andamento));
     localStorage.setItem('cp_donelog',JSON.stringify(this.doneLog));
+    localStorage.setItem('cp_temas',JSON.stringify(this.temas));
   }
 };
 let modalType=null,prorIdx=null,prorType=null,prorMode='h';
 
-// Horas úteis restantes até o deadline (conta apenas horas em dias seg-sex)
-function businessHoursLeft(deadline){
-  if(!deadline)return null;
-  const now=new Date(),end=new Date(deadline);
-  if(end<=now)return 0;
-  const totalHours=Math.ceil((end-now)/3600000);
-  let count=0,probe=new Date(now);
-  const maxIter=Math.min(totalHours+1,720);
-  for(let i=0;i<maxIter;i++){
-    if(probe.getDay()!==0&&probe.getDay()!==6)count++;
-    probe.setTime(probe.getTime()+3600000);
-    if(probe>=end)break;
-  }
-  return count;
+// TIME PICKER: horas 08-18, minutos 00/10/20/30/40/50
+function buildTimePicker(dh='09',dm='00'){
+  const hours=Array.from({length:11},(_,i)=>String(i+8).padStart(2,'0'));
+  const mins=['00','10','20','30','40','50'];
+  const hO=hours.map(h=>`<option value="${h}" ${h===dh?'selected':''}>${h}h</option>`).join('');
+  const mO=mins.map(m=>`<option value="${m}" ${m===dm?'selected':''}>${m}min</option>`).join('');
+  return `<div class="time-picker-row"><div class="field"><label>Hora</label><select id="m-hora">${hO}</select></div><div class="field"><label>Minuto</label><select id="m-min">${mO}</select></div></div>`;
 }
+function getTimeFromPicker(){return document.getElementById('m-hora').value+':'+document.getElementById('m-min').value;}
 
-// Prioridade efetiva com escalonamento automático por horas úteis
-// baixa → média quando ≤24h úteis; baixa/média → alta quando ≤4h úteis
-function effectivePriority(t){
-  const orig=t.prioridade;
-  if(orig==='alta')return{pri:'alta',escalated:false,reason:''};
-  if(!t.deadline)return{pri:orig,escalated:false,reason:''};
-  const bh=businessHoursLeft(t.deadline);
-  if(orig==='media'){
-    if(bh<=4)return{pri:'alta',escalated:true,reason:'⬆ Escalado para alta (≤4h úteis)'};
-    return{pri:'media',escalated:false,reason:''};
-  }
-  if(orig==='baixa'){
-    if(bh<=4)return{pri:'alta',escalated:true,reason:'⬆ Escalado para alta (≤4h úteis)'};
-    if(bh<=24)return{pri:'media',escalated:true,reason:'⬆ Escalado para média (≤24h úteis)'};
-    return{pri:'baixa',escalated:false,reason:''};
-  }
-  return{pri:orig,escalated:false,reason:''};
-}
+// Escalamento automático por horas úteis
+function businessHoursLeft(dl){if(!dl)return null;const now=new Date(),end=new Date(dl);if(end<=now)return 0;let count=0,probe=new Date(now);const max=Math.min(Math.ceil((end-now)/3600000)+1,720);for(let i=0;i<max;i++){if(probe.getDay()!==0&&probe.getDay()!==6)count++;probe.setTime(probe.getTime()+3600000);if(probe>=end)break;}return count;}
+function effectivePriority(t){const o=t.prioridade;if(o==='alta')return{pri:'alta',escalated:false,reason:''};if(!t.deadline)return{pri:o,escalated:false,reason:''};const bh=businessHoursLeft(t.deadline);if(o==='media'){if(bh<=4)return{pri:'alta',escalated:true,reason:'⬆ Escalado para alta (<=4h úteis)'};return{pri:'media',escalated:false,reason:''};}if(o==='baixa'){if(bh<=4)return{pri:'alta',escalated:true,reason:'⬆ Escalado para alta (<=4h úteis)'};if(bh<=24)return{pri:'media',escalated:true,reason:'⬆ Escalado para média (<=24h úteis)'};return{pri:'baixa',escalated:false,reason:''};}return{pri:o,escalated:false,reason:''};}
 
 function getFaturaAlertDate(t){const n=new Date(),d=new Date(n.getFullYear(),n.getMonth(),t);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d;}
 function isFaturaAlertToday(){const today=new Date();today.setHours(0,0,0,0);for(const b of[1,16]){const a=getFaturaAlertDate(b);a.setHours(0,0,0,0);if(a.getTime()===today.getTime())return true;}return false;}
-function nextFaturaLabel(){const n=new Date();n.setHours(0,0,0,0);const c=[];for(const b of[1,16]){let d=getFaturaAlertDate(b);d.setHours(0,0,0,0);if(d>=n)c.push(d);const nm=new Date(n.getFullYear(),n.getMonth()+1,b);while(nm.getDay()===0||nm.getDay()===6)nm.setDate(nm.getDate()+1);nm.setHours(0,0,0,0);c.push(nm);}c.sort((a,b)=>a-b);const nx=c.find(d=>d>=n)||c[0];const diff=Math.round((nx-n)/86400000);const fmt=nx.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});if(diff===0)return`Hoje (${fmt}) — dia de faturamento!`;if(diff===1)return`Amanhã (${fmt})`;return`${fmt} — em ${diff} dia(s)`;}
+function nextFaturaLabel(){const n=new Date();n.setHours(0,0,0,0);const c=[];for(const b of[1,16]){let d=getFaturaAlertDate(b);d.setHours(0,0,0,0);if(d>=n)c.push(d);const nm=new Date(n.getFullYear(),n.getMonth()+1,b);while(nm.getDay()===0||nm.getDay()===6)nm.setDate(nm.getDate()+1);nm.setHours(0,0,0,0);c.push(nm);}c.sort((a,b)=>a-b);const nx=c.find(d=>d>=n)||c[0];const diff=Math.round((nx-n)/86400000);const fmt=nx.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});if(diff===0)return`Hoje (${fmt}) - dia de faturamento!`;if(diff===1)return`Amanhã (${fmt})`;return`${fmt} - em ${diff} dia(s)`;}
 function todayKey(){return new Date().toDateString();}
 function isExpired(dl){return dl&&Date.now()>new Date(dl).getTime();}
 function msLeft(dl){return dl?new Date(dl).getTime()-Date.now():null;}
@@ -204,61 +213,31 @@ function collectAlerts(){
   const items=[],td=todayKey();
   if(isFaturaAlertToday()){S.clients.forEach((c,i)=>{if(!S.fatDone[`${c}_${td}`])items.push({type:'fatura',id:`fat_${i}`,cls:'red',icon:'ti-receipt',title:`Enviar fatura para ${c}`,sub:'Dia de faturamento (ajustado para dia útil)',expired:false,actions:[{label:'✓ Feito',fn:`markFatDone('${c}','${td}')`}]});});}
   S.chamados.forEach((ch,i)=>{if(ch.done)return;const exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);if(exp||(ms!==null&&ms<7200000))items.push({type:'chamado',id:`cha_${i}`,cls:exp?'red':'yellow',icon:'ti-ticket',title:`Chamado #${ch.ticket} · Pedido ${ch.pedido}`,sub:formatMsLeft(ms),expired:exp,actions:[{label:'⏱ Prorrogar',fn:`openPror('chamado',${i})`},{label:'✓ Feito',fn:`doneChamado(${i})`}]});});
-  S.tarefas.forEach((t,i)=>{
-    if(t.done)return;
-    const exp=isExpired(t.deadline),ms=msLeft(t.deadline);
-    const{pri,escalated,reason}=effectivePriority(t);
-    const aKey=`tar_${i}`;
-    const urgente=exp||(ms!==null&&ms<7200000),proxima=!exp&&ms!==null&&ms<86400000*2;
-    const escBadge=escalated?`<span style="font-size:10px;font-weight:700;background:${pri==='alta'?'#FCEBEB':'#FAEEDA'};color:${pri==='alta'?'#791F1F':'#633806'};border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">⬆ Auto</span>`:'';
-    const subText=escalated&&reason?`${reason} · ${formatMsLeft(ms)}`:formatMsLeft(ms);
-    if(pri==='alta'){
-      if(exp)items.push({type:'tarefa',id:aKey,cls:'expired',icon:'ti-flag',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')}${escalated?' · Original: '+t.prioridade:''}`,expired:true,andKey:aKey,escBadge,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});
-      else if(urgente||proxima||escalated)items.push({type:'tarefa',id:aKey,cls:'red',icon:'ti-flag',title:`Tarefa urgente: ${t.titulo}`,sub:subText,expired:false,andKey:aKey,escBadge,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});
-    }else if(pri==='media'){
-      if(urgente||proxima||escalated)items.push({type:'tarefa',id:aKey,cls:'yellow',icon:'ti-flag-2',title:`Tarefa: ${t.titulo}`,sub:subText,expired:false,andKey:aKey,escBadge,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});
-    }
+  S.tarefas.forEach((t,i)=>{if(t.done)return;const exp=isExpired(t.deadline),ms=msLeft(t.deadline);const{pri,escalated,reason}=effectivePriority(t);const aKey=`tar_${i}`,urgente=exp||(ms!==null&&ms<7200000),proxima=!exp&&ms!==null&&ms<86400000*2;const eb=escalated?`<span style="font-size:10px;font-weight:700;background:${pri==='alta'?'#FCEBEB':'#FAEEDA'};color:${pri==='alta'?'#791F1F':'#633806'};border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">⬆ Auto</span>`:'';const sub=escalated&&reason?`${reason} · ${formatMsLeft(ms)}`:formatMsLeft(ms);
+    if(pri==='alta'){if(exp)items.push({type:'tarefa',id:aKey,cls:'expired',icon:'ti-flag',title:`⚠ PRAZO ENCERRADO — ${t.titulo}`,sub:`Vencido há ${formatMsLeft(ms).replace('Vencido há ','')}${escalated?' · Original: '+t.prioridade:''}`,expired:true,andKey:aKey,eb,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});else if(urgente||proxima||escalated)items.push({type:'tarefa',id:aKey,cls:'red',icon:'ti-flag',title:`Tarefa urgente: ${t.titulo}`,sub,expired:false,andKey:aKey,eb,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
+    else if(pri==='media'){if(urgente||proxima||escalated)items.push({type:'tarefa',id:aKey,cls:'yellow',icon:'ti-flag-2',title:`Tarefa: ${t.titulo}`,sub,expired:false,andKey:aKey,eb,actions:[{label:'⏱ Prorrogar',fn:`openPror('tarefa',${i})`},{label:'✓ Feito',fn:`doneTarefa(${i})`}]});}
   });
   return items;
 }
 
-function buildAlertHTML(item){
-  const mt=isMuted(item.type,item.id);
-  const btns=item.actions.map(a=>`<button class="btn-done" onclick="${a.fn}">${a.label}</button>`).join('');
-  const mb=`<button class="btn-mute-item" onclick="toggleMuteItem('${item.type}','${item.id.replace(/'/g,"\\'")}')"><i class="ti ${mt?'ti-volume-off':'ti-volume-3'}"></i> ${mt?'Mutado':'Mutar'}</button>`;
-  const andKey=item.andKey||null,isAnd=andKey?!!S.andamento[andKey]:false;
-  const andCb=andKey?`<label class="chk-andamento"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${andKey}')"/> Em andamento</label>`:'';
-  const escBadge=item.escBadge||'';
-  return`<div class="al ${item.cls}${mt?' muted':''}"><i class="ti ${item.icon} al-icon"></i><div class="al-body"><div class="al-title">${item.title}${escBadge}</div><div class="al-sub">${item.sub}</div><div class="al-actions">${btns}</div><div class="al-footer">${andCb}<div style="display:flex;gap:5px;margin-left:auto">${mb}</div></div></div></div>`;
-}
+function buildAlertHTML(item){const mt=isMuted(item.type,item.id);const btns=item.actions.map(a=>`<button class="btn-done" onclick="${a.fn}">${a.label}</button>`).join('');const mb=`<button class="btn-mute-item" onclick="toggleMuteItem('${item.type}','${item.id.replace(/'/g,"\\'")}')"><i class="ti ${mt?'ti-volume-off':'ti-volume-3'}"></i> ${mt?'Mutado':'Mutar'}</button>`;const ak=item.andKey||null,isA=ak?!!S.andamento[ak]:false;const cb=ak?`<label class="chk-andamento"><input type="checkbox" ${isA?'checked':''} onchange="toggleAndamento('${ak}')"/> Em andamento</label>`:'';const eb=item.eb||'';return`<div class="al ${item.cls}${mt?' muted':''}"><i class="ti ${item.icon} al-icon"></i><div class="al-body"><div class="al-title">${item.title}${eb}</div><div class="al-sub">${item.sub}</div><div class="al-actions">${btns}</div><div class="al-footer">${cb}<div style="display:flex;gap:5px;margin-left:auto">${mb}</div></div></div></div>`;}
 
-function renderHome(){
-  const items=collectAlerts(),el=document.getElementById('home-content');
-  const urgent=items.filter(i=>i.cls==='red'||i.cls==='expired'),attn=items.filter(i=>i.cls==='yellow');
-  let html='';
-  function rs(list,label,cc){if(!list.length)return'';let h=`<div class="sec-hdr"><span class="sec-title">${label}</span><span class="sec-count ${cc}">${list.length}</span></div>`;list.forEach(item=>{h+=buildAlertHTML(item);});return h;}
-  if(!items.length){html='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="color:#3B6D11;opacity:.7"></i>Tudo em dia! Nenhum alerta pendente.</div>';}
-  else{html+=rs(urgent,'Atenção imediata','');html+=rs(attn,'Acompanhamento','yellow');}
-  const allCha=S.chamados.filter(c=>!c.done),allT=S.tarefas.filter(t=>!t.done);
-  if(allCha.length||allT.length){
-    html+=`<div class="divider" style="margin:14px 0 10px"></div><div class="sec-hdr"><span class="sec-title">Todas as pendências</span></div>`;
-    allCha.forEach((ch,i)=>{const exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);html+=`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓</button></div></div>`;});
-    allT.forEach((t,i)=>{const exp=isExpired(t.deadline),ms=msLeft(t.deadline);const{pri,escalated}=effectivePriority(t);const aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];const escB=escalated?`<span style="font-size:10px;font-weight:700;background:${pri==='alta'?'#FCEBEB':'#FAEEDA'};color:${pri==='alta'?'#791F1F':'#633806'};border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">⬆ Auto</span>`:'';const andB=isAnd?`<span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">EM ANDAMENTO</span>`:'';html+=`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}${escB}${andB}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':pri}">${exp?'VENCIDO':pri.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓</button></div></div>`;});
-  }
-  el.innerHTML=html;updateBadges(items);
-}
-function updateBadges(items){const n=items.length,el=document.getElementById('badge-total');if(n>0){el.textContent=n+(n===1?' alerta':' alertas');el.classList.remove('hidden')}else el.classList.add('hidden');function b(id,n){const x=document.getElementById(id);if(n>0){x.textContent=n;x.classList.remove('hidden')}else x.classList.add('hidden')}b('tb-faturas',items.filter(i=>i.type==='fatura').length);b('tb-chamados',items.filter(i=>i.type==='chamado').length);b('tb-tarefas',items.filter(i=>i.type==='tarefa').length);const nd=S.doneLog.length,bd=document.getElementById('tb-feito');if(nd>0){bd.textContent=nd;bd.classList.remove('hidden')}else bd.classList.add('hidden');}
+function renderHome(){const items=collectAlerts(),el=document.getElementById('home-content');const urgent=items.filter(i=>i.cls==='red'||i.cls==='expired'),attn=items.filter(i=>i.cls==='yellow');let html='';function rs(list,label,cc){if(!list.length)return'';let h=`<div class="sec-hdr"><span class="sec-title">${label}</span><span class="sec-count ${cc}">${list.length}</span></div>`;list.forEach(item=>{h+=buildAlertHTML(item);});return h;}if(!items.length){html='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="color:#3B6D11;opacity:.7"></i>Tudo em dia! Nenhum alerta pendente.</div>';}else{html+=rs(urgent,'Atenção imediata','');html+=rs(attn,'Acompanhamento','yellow');}const allCha=S.chamados.filter(c=>!c.done),allT=S.tarefas.filter(t=>!t.done);if(allCha.length||allT.length){html+=`<div class="divider" style="margin:14px 0 10px"></div><div class="sec-hdr"><span class="sec-title">Todas as pendências</span></div>`;allCha.forEach((ch,i)=>{const exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);html+=`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓</button></div></div>`;});allT.forEach((t,i)=>{const exp=isExpired(t.deadline),ms=msLeft(t.deadline);const{pri,escalated}=effectivePriority(t);const aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];const eB=escalated?`<span style="font-size:10px;font-weight:700;background:${pri==='alta'?'#FCEBEB':'#FAEEDA'};color:${pri==='alta'?'#791F1F':'#633806'};border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">⬆ Auto</span>`:'';const aB=isAnd?`<span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:1px">EM ANDAMENTO</span>`:'';html+=`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}${eB}${aB}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':pri}">${exp?'VENCIDO':pri.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓</button></div></div>`;});}el.innerHTML=html;updateBadges(items);}
+
+function updateBadges(items){const n=items.length,el=document.getElementById('badge-total');if(n>0){el.textContent=n+(n===1?' alerta':' alertas');el.classList.remove('hidden')}else el.classList.add('hidden');function b(id,n){const x=document.getElementById(id);if(n>0){x.textContent=n;x.classList.remove('hidden')}else x.classList.add('hidden')}b('tb-faturas',items.filter(i=>i.type==='fatura').length);b('tb-chamados',items.filter(i=>i.type==='chamado').length);b('tb-tarefas',S.tarefas.filter(t=>!t.done).length);const nd=S.doneLog.length,bd=document.getElementById('tb-feito');if(nd>0){bd.textContent=nd;bd.classList.remove('hidden')}else bd.classList.add('hidden');const nt=S.temas.filter(t=>!t.done).length,bt=document.getElementById('tb-temas');if(nt>0){bt.textContent=nt;bt.classList.remove('hidden')}else bt.classList.add('hidden');}
 function updateMuteBtn(){document.getElementById('mute-icon').className=S.muteAll?'ti ti-volume-off':'ti ti-volume';document.getElementById('mute-label').textContent=S.muteAll?'Som mutado':'Som ativo';document.getElementById('btn-muteall').classList.toggle('muted',S.muteAll);}
 function renderFaturas(){document.getElementById('fat-info-text').textContent=`Próximo lembrete de fatura: ${nextFaturaLabel()}. Os alertas dos dias 01 e 16 são movidos para o próximo dia útil se caírem em fim de semana.`;const el=document.getElementById('fat-list');if(!S.clients.length){el.innerHTML='<div class="empty"><i class="ti ti-users"></i>Nenhum cliente cadastrado</div>';return;}const td=todayKey(),isAD=isFaturaAlertToday();el.innerHTML=S.clients.map((c,i)=>{const done=S.fatDone[`${c}_${td}`];return`<div class="card"><div class="card-row"><i class="ti ti-building" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title" style="${done?'text-decoration:line-through;opacity:.45':''}">${c}</div><div class="card-sub">${isAD&&!done?'Hoje é dia de faturamento':'Próximo: '+nextFaturaLabel()}</div></div><span class="tag ${isAD&&!done?'alta':'ok'}">${isAD&&!done?'HOJE':'OK'}</span><button class="btn-sm del" onclick="removeCli(${i})" style="margin-left:6px"><i class="ti ti-trash"></i></button></div></div>`;}).join('');}
 function renderChamados(){const el=document.getElementById('cha-list'),ativos=S.chamados.filter(c=>!c.done);if(!ativos.length){el.innerHTML='<div class="empty"><i class="ti ti-ticket"></i>Nenhum chamado aberto</div>';return;}el.innerHTML=ativos.map(ch=>{const i=S.chamados.indexOf(ch),exp=isExpired(ch.deadline),ms=msLeft(ch.deadline);return`<div class="card"><div class="card-row"><i class="ti ti-ticket" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">#${ch.ticket} · Pedido ${ch.pedido}</div><div class="card-sub">${ch.deadline?formatDeadline(ch.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div></div><span class="tag ${exp?'vencido':'andamento'}">${exp?'VENCIDO':'EM DIA'}</span><button class="btn-sm" onclick="openPror('chamado',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneChamado(${i})" style="margin-left:4px">✓ Feito</button></div></div>`;}).join('');}
-function renderTarefas(){const el=document.getElementById('tar-list'),ativas=S.tarefas.filter(t=>!t.done);if(!ativas.length){el.innerHTML='<div class="empty"><i class="ti ti-check"></i>Nenhuma tarefa pendente</div>';return;}const ord=['alta','media','baixa'];el.innerHTML=[...ativas].sort((a,b)=>ord.indexOf(effectivePriority(a).pri)-ord.indexOf(effectivePriority(b).pri)).map(t=>{const i=S.tarefas.indexOf(t),exp=isExpired(t.deadline),ms=msLeft(t.deadline);const{pri,escalated,reason}=effectivePriority(t);const aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];const escNote=escalated?`<div style="font-size:10px;color:${pri==='alta'?'#791F1F':'#633806'};margin-top:3px;font-weight:600">⬆ ${reason} · Original: ${t.prioridade}</div>`:'';return`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div>${escNote}</div><span class="tag ${exp?'vencido':pri}">${exp?'VENCIDO':pri.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓ Feito</button></div><div style="margin-top:8px;padding-top:8px;border-top:.5px solid #e0dfd8"><label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:11px;font-weight:600;color:#6b6b6b;user-select:none"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${aKey}')" style="width:14px;height:14px;cursor:pointer;accent-color:#0C447C"/> Em andamento ${isAnd?'<span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px">✓ Ciente</span>':''}</label></div></div>`;}).join('');}
-function renderFeito(){const el=document.getElementById('feito-content');if(!S.doneLog.length){el.innerHTML='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="opacity:.3"></i>Nenhum item concluído ainda.</div>';return;}const icons={fatura:'ti-receipt',chamado:'ti-ticket',tarefa:'ti-flag'},labels={fatura:'Fatura',chamado:'Chamado',tarefa:'Tarefa'};let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:12px;color:#6b6b6b">${S.doneLog.length} item(ns) concluído(s)</span><button class="btn-clear" onclick="clearDoneLog()"><i class="ti ti-trash" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Limpar tudo</button></div>`;S.doneLog.forEach(entry=>{const d=new Date(entry.doneAt),ds=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}),ts=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});const et=entry.extra?`<span class="tag ${entry.extra}" style="margin-left:6px">${entry.extra.toUpperCase()}</span>`:'';html+=`<div class="done-card"><div class="done-card-row"><i class="ti ${icons[entry.type]||'ti-check'} done-icon"></i><div style="flex:1;min-width:0"><div class="done-title">${entry.title}</div><div class="done-meta">${labels[entry.type]||'Item'} · Concluído em ${ds} às ${ts}${entry.sub?' · '+entry.sub:''}</div></div>${et}<span class="done-tag" style="margin-left:8px">✓ Feito</span></div></div>`;});el.innerHTML=html;}
+function renderTarefas(){const el=document.getElementById('tar-list'),ativas=S.tarefas.filter(t=>!t.done);if(!ativas.length){el.innerHTML='<div class="empty"><i class="ti ti-check"></i>Nenhuma tarefa pendente</div>';return;}const ord=['alta','media','baixa'];el.innerHTML=[...ativas].sort((a,b)=>ord.indexOf(effectivePriority(a).pri)-ord.indexOf(effectivePriority(b).pri)).map(t=>{const i=S.tarefas.indexOf(t),exp=isExpired(t.deadline),ms=msLeft(t.deadline);const{pri,escalated,reason}=effectivePriority(t);const aKey=`tar_${i}`,isAnd=!!S.andamento[aKey];const escN=escalated?`<div style="font-size:10px;color:${pri==='alta'?'#791F1F':'#633806'};margin-top:3px;font-weight:600">⬆ ${reason} · Original: ${t.prioridade}</div>`:'';return`<div class="card"><div class="card-row"><i class="ti ti-flag" style="font-size:15px;color:#6b6b6b"></i><div style="flex:1"><div class="card-title">${t.titulo}</div><div class="card-sub">${t.deadline?formatDeadline(t.deadline):'Sem prazo'} · ${formatMsLeft(ms)}</div>${escN}</div><span class="tag ${exp?'vencido':pri}">${exp?'VENCIDO':pri.toUpperCase()}</span><button class="btn-sm" onclick="openPror('tarefa',${i})" style="margin-left:6px"><i class="ti ti-clock-edit"></i></button><button class="btn-sm" onclick="doneTarefa(${i})" style="margin-left:4px">✓ Feito</button></div><div style="margin-top:8px;padding-top:8px;border-top:.5px solid #d4d2cb"><label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:11px;font-weight:600;color:#6b6b6b;user-select:none"><input type="checkbox" ${isAnd?'checked':''} onchange="toggleAndamento('${aKey}')" style="width:14px;height:14px;cursor:pointer;accent-color:#0C447C"/> Em andamento ${isAnd?'<span style="font-size:10px;font-weight:700;background:#E6F1FB;color:#0C447C;border-radius:4px;padding:1px 6px">✓ Ciente</span>':''}</label></div></div>`;}).join('');}
+function renderTemas(){const el=document.getElementById('temas-list');const ativos=S.temas.filter(t=>!t.done);if(!ativos.length){el.innerHTML='<div class="empty"><i class="ti ti-message-dots"></i>Nenhum tema cadastrado ainda.</div>';return;}el.innerHTML=ativos.map(t=>{const i=S.temas.indexOf(t);const ds=new Date(t.createdAt).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});return`<div class="tema-card"><i class="ti ti-message-dots tema-icon"></i><div class="tema-body"><div class="tema-title">${t.titulo}</div><div class="tema-meta">Adicionado em ${ds}</div></div><button class="btn-sm" onclick="doneTema(${i})" style="margin-left:6px;white-space:nowrap;flex-shrink:0;border-color:#C4A0E8;color:#3D1F61">✓ Feito</button></div>`;}).join('');}
+function renderFeito(){const el=document.getElementById('feito-content');if(!S.doneLog.length){el.innerHTML='<div class="empty" style="padding:32px 0"><i class="ti ti-circle-check" style="opacity:.3"></i>Nenhum item concluído ainda.</div>';return;}const icons={fatura:'ti-receipt',chamado:'ti-ticket',tarefa:'ti-flag',tema:'ti-message-dots'},labels={fatura:'Fatura',chamado:'Chamado',tarefa:'Tarefa',tema:'Tema 1:1'};let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:12px;color:#6b6b6b">${S.doneLog.length} item(ns) concluído(s)</span><button class="btn-clear" onclick="clearDoneLog()"><i class="ti ti-trash" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Limpar tudo</button></div>`;S.doneLog.forEach(entry=>{const d=new Date(entry.doneAt),ds=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}),ts=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});const et=entry.extra?`<span class="tag ${entry.extra}" style="margin-left:6px">${entry.extra.toUpperCase()}</span>`:'';html+=`<div class="done-card"><div class="done-card-row"><i class="ti ${icons[entry.type]||'ti-check'} done-icon"></i><div style="flex:1;min-width:0"><div class="done-title">${entry.title}</div><div class="done-meta">${labels[entry.type]||'Item'} · Concluído em ${ds} às ${ts}${entry.sub?' · '+entry.sub:''}</div></div>${et}<span class="done-tag" style="margin-left:8px">✓ Feito</span></div></div>`;});el.innerHTML=html;}
 function clearDoneLog(){if(!confirm('Limpar todo o histórico de itens concluídos?'))return;S.doneLog=[];S.save();renderAll();}
-function renderAll(){renderHome();renderFaturas();renderChamados();renderTarefas();renderFeito();updateMuteBtn();}
+function renderAll(){renderHome();renderFaturas();renderChamados();renderTarefas();renderTemas();renderFeito();updateMuteBtn();}
 
 function markFatDone(c,td){playDone();logDone('fatura',`Fatura para ${c}`,'Dia de faturamento confirmado');S.fatDone[`${c}_${td}`]=true;S.save();renderAll();}
 function doneChamado(i){playDone();const ch=S.chamados[i];logDone('chamado',`Chamado #${ch.ticket} · Pedido ${ch.pedido}`,ch.deadline?`Prazo: ${formatDeadline(ch.deadline)}`:'');S.chamados[i].done=true;S.save();renderAll();}
 function doneTarefa(i){playDone();const t=S.tarefas[i];logDone('tarefa',t.titulo,t.deadline?`Prazo: ${formatDeadline(t.deadline)}`:'',t.prioridade);delete S.andamento[`tar_${i}`];S.tarefas[i].done=true;S.save();renderAll();}
+function doneTema(i){playDone();const t=S.temas[i];logDone('tema',t.titulo,'Tema 1:1 concluído');S.temas[i].done=true;S.save();renderAll();}
 function removeCli(i){S.clients.splice(i,1);S.save();renderAll();}
 
 function openPror(type,i){prorType=type;prorIdx=i;prorMode='h';document.getElementById('pror-val').value=4;document.getElementById('pror-tab-h').classList.add('active');document.getElementById('pror-tab-d').classList.remove('active');document.getElementById('pror-unit-label').textContent='horas';document.getElementById('pror-bg').classList.add('open');}
@@ -267,10 +246,34 @@ function closeProrBg(e){if(e.target.id==='pror-bg')closePror();}
 function setProrMode(m){prorMode=m;document.getElementById('pror-tab-h').classList.toggle('active',m==='h');document.getElementById('pror-tab-d').classList.toggle('active',m==='d');document.getElementById('pror-unit-label').textContent=m==='h'?'horas':'dias úteis';document.getElementById('pror-val').value=m==='h'?4:2;}
 function confirmPror(){const val=parseInt(document.getElementById('pror-val').value)||1;const obj=prorType==='chamado'?S.chamados[prorIdx]:S.tarefas[prorIdx];const base=obj.deadline&&new Date(obj.deadline)>new Date()?new Date(obj.deadline):new Date();if(prorMode==='h'){base.setTime(base.getTime()+val*3600000);}else{let added=0,cur=new Date(base);while(added<val){cur.setDate(cur.getDate()+1);if(cur.getDay()!==0&&cur.getDay()!==6)added++;}base.setTime(cur.getTime());}obj.deadline=base.toISOString();S.save();closePror();renderAll();}
 function switchTab(t){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector(`.tab-btn[onclick*="'${t}'"]`).classList.add('active');document.getElementById(`panel-${t}`).classList.add('active');}
-function openModal(type){modalType=type;document.getElementById('modal-title').textContent={chamado:'Novo chamado',tarefa:'Nova tarefa',cliente:'Cadastrar cliente'}[type];const now=new Date(),todayStr=now.toISOString().split('T')[0],timeStr=now.toTimeString().slice(0,5);const hint=`<div style="font-size:11px;color:#6b6b6b;margin-top:-6px;margin-bottom:8px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>O alerta disparará ao atingir essa data e horário (Brasília)</div>`;const bodies={chamado:`<div class="field-row"><div class="field"><label>Número do ticket</label><input id="m-ticket" placeholder="TKT-001"/></div><div class="field"><label>Número do pedido</label><input id="m-pedido" placeholder="PED-001"/></div></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div><div class="field"><label>Horário limite</label><input id="m-hora" type="time" value="${timeStr}"/></div>${hint}`,tarefa:`<div class="field"><label>Título</label><input id="m-titulo" placeholder="Ex: Revisar relatório"/></div><div class="field"><label>Prioridade</label><select id="m-pri"><option value="alta">Alta — urgente</option><option value="media" selected>Média</option><option value="baixa">Baixa</option></select></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div><div class="field"><label>Horário limite</label><input id="m-hora" type="time" value="${timeStr}"/></div>${hint}`,cliente:`<div class="field"><label>Nome do cliente</label><input id="m-cli" placeholder="Ex: Empresa ABC"/></div>`};document.getElementById('modal-body').innerHTML=bodies[type];if(type==='tarefa'){const d=new Date();d.setDate(d.getDate()+3);document.getElementById('m-data').value=d.toISOString().split('T')[0];}document.getElementById('modal-bg').classList.add('open');}
+
+function openModal(type){
+  modalType=type;
+  document.getElementById('modal-title').textContent={chamado:'Novo chamado',tarefa:'Nova tarefa',cliente:'Cadastrar cliente',tema:'Incluir tema 1:1'}[type];
+  const now=new Date(),todayStr=now.toISOString().split('T')[0];
+  const rawH=now.getHours(),rawM=now.getMinutes();
+  const dh=String(Math.min(Math.max(rawH,8),18)).padStart(2,'0');
+  const dm=String(Math.ceil(rawM/10)*10%60).padStart(2,'0');
+  const hint=`<div style="font-size:11px;color:#6b6b6b;margin-top:-6px;margin-bottom:8px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>O alerta disparará ao atingir essa data e horário (Brasília)</div>`;
+  const bodies={
+    chamado:`<div class="field-row"><div class="field"><label>Número do ticket</label><input id="m-ticket" placeholder="TKT-001"/></div><div class="field"><label>Número do pedido</label><input id="m-pedido" placeholder="PED-001"/></div></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div>${buildTimePicker(dh,dm)}${hint}`,
+    tarefa:`<div class="field"><label>Título</label><input id="m-titulo" placeholder="Ex: Revisar relatório"/></div><div class="field"><label>Prioridade</label><select id="m-pri"><option value="alta">Alta — urgente</option><option value="media" selected>Média</option><option value="baixa">Baixa</option></select></div><div class="field"><label>Data limite</label><input id="m-data" type="date" value="${todayStr}"/></div>${buildTimePicker(dh,dm)}${hint}`,
+    cliente:`<div class="field"><label>Nome do cliente</label><input id="m-cli" placeholder="Ex: Empresa ABC"/></div>`,
+    tema:`<div class="field"><label>Tema / assunto</label><input id="m-tema" placeholder="Ex: Alinhamento sobre projeto X"/></div><div style="font-size:11px;color:#6b6b6b;margin-top:-6px"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Temas não têm prazo — aparecem apenas na aba Temas 1:1</div>`
+  };
+  document.getElementById('modal-body').innerHTML=bodies[type];
+  if(type==='tarefa'){const d=new Date();d.setDate(d.getDate()+3);document.getElementById('m-data').value=d.toISOString().split('T')[0];}
+  document.getElementById('modal-bg').classList.add('open');
+}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
 function closeMBg(e){if(e.target.id==='modal-bg')closeModal();}
-function saveModal(){if(modalType==='chamado'){const t=document.getElementById('m-ticket').value.trim(),p=document.getElementById('m-pedido').value.trim(),data=document.getElementById('m-data').value,hora=document.getElementById('m-hora').value;if(!t||!p||!data||!hora)return alert('Preencha todos os campos.');S.chamados.push({ticket:t,pedido:p,deadline:new Date(`${data}T${hora}:00`).toISOString(),createdAt:new Date().toISOString(),done:false});}else if(modalType==='tarefa'){const t=document.getElementById('m-titulo').value.trim(),pr=document.getElementById('m-pri').value,data=document.getElementById('m-data').value,hora=document.getElementById('m-hora').value;if(!t||!data||!hora)return alert('Preencha todos os campos.');S.tarefas.push({titulo:t,prioridade:pr,deadline:new Date(`${data}T${hora}:00`).toISOString(),createdAt:new Date().toISOString(),done:false});}else if(modalType==='cliente'){const c=document.getElementById('m-cli').value.trim();if(!c)return alert('Digite o nome do cliente.');S.clients.push(c);}S.save();closeModal();renderAll();}
+function saveModal(){
+  if(modalType==='chamado'){const t=document.getElementById('m-ticket').value.trim(),p=document.getElementById('m-pedido').value.trim(),data=document.getElementById('m-data').value,hora=getTimeFromPicker();if(!t||!p||!data)return alert('Preencha todos os campos.');S.chamados.push({ticket:t,pedido:p,deadline:new Date(`${data}T${hora}:00`).toISOString(),createdAt:new Date().toISOString(),done:false});}
+  else if(modalType==='tarefa'){const t=document.getElementById('m-titulo').value.trim(),pr=document.getElementById('m-pri').value,data=document.getElementById('m-data').value,hora=getTimeFromPicker();if(!t||!data)return alert('Preencha todos os campos.');S.tarefas.push({titulo:t,prioridade:pr,deadline:new Date(`${data}T${hora}:00`).toISOString(),createdAt:new Date().toISOString(),done:false});}
+  else if(modalType==='cliente'){const c=document.getElementById('m-cli').value.trim();if(!c)return alert('Digite o nome do cliente.');S.clients.push(c);}
+  else if(modalType==='tema'){const t=document.getElementById('m-tema').value.trim();if(!t)return alert('Digite o tema.');S.temas.push({titulo:t,createdAt:new Date().toISOString(),done:false});}
+  S.save();closeModal();renderAll();
+}
 
 function checkAndAlert(){if(S.muteAll)return;const items=collectAlerts();if(!items.length)return;const nm=items.filter(i=>!isMuted(i.type,i.id));if(!nm.length)return;const now=Date.now(),hasExp=nm.some(i=>i.expired);if(hasExp){if(now-getLastSound(SND_E)>=ALERT_INTERVAL){setLastSound(SND_E);playExpired();}}else{if(now-getLastSound(SND_N)>=ALERT_INTERVAL){setLastSound(SND_N);playAlert();}}}
 
